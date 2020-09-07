@@ -11,8 +11,8 @@ client.on('ready' , () => {
 let player_x = 0
 let player_y = 0
 
-let map_x = 10
-let map_y = 9
+let map_x = 7
+let map_y = 5
 
 client.on('message', msg => {
     if (msg.content === `//play`) {
@@ -44,47 +44,56 @@ client.on('message', msg => {
                     //console.log(reaction)
                     switch (reaction.emoji.name) {
                         case '➡':
-                            if (player_x - 2 != map_x) {
-                                player_x ++
-                                console.log('move right')
-
-                                sentMessage.edit(buildMap(map_x, map_y))
-                                
-                            } else {
+                            if (player_x + 1 == map_x) {
                                 console.log('can\'t move right')
-                            }
-                            break;
-                        case '⬅':
-                            if (player_x = 0) {
-                                console.log('can\'t move left')
+                                break;                                                         
                             } else {
-                                player_x - 1
-                                console.log('move left')
+                                ++player_x
+                                console.log('move right')
+                                console.log(`changed player x to : ${player_x}`)
 
                                 sentMessage.edit(buildMap(map_x, map_y))
+                                break;       
                             }
-                            break;
+
+                        case '⬅':
+                            if (player_x == 0) {
+                                console.log('can\'t move left')
+                                break;
+                            } else {
+                                --player_x
+                                console.log('move left')
+                                console.log(`changed player x to : ${player_x}`)
+
+                                sentMessage.edit(buildMap(map_x, map_y))
+                                break;
+                            }
+
                         case '⬆':
-                            if (player_y = 0) {
+                            if (player_y == 0) {
                                 console.log('can\'t move up')
                                 break;
                             } else {
-                                player_y = player_y - 1
+                                --player_y
                                 console.log('move up')
+                                console.log(`changed player y to : ${player_y}`)
 
                                 sentMessage.edit(buildMap(map_x, map_y))
+                                break;
                             }
-                            break;
+                
                         case '⬇':
-                            if (player_y - 1 == map_y) {
+                            if (player_y + 3 == map_y) {
                                 console.log('can\'t move down')
+                                break;
                             } else {
-                                player_y ++
+                                ++player_y
                                 console.log('move down')
+                                console.log(`changed player y to : ${player_y}`)
 
                                 sentMessage.edit(buildMap(map_x, map_y))
+                                break;
                             }
-                            break;
                     }
                     
                 });
@@ -116,38 +125,57 @@ function buildMap(col, row) {
     let y = 1
 
     for (i=0;i<row;i++) {
+        //console.log(map)
         //console.log(`y : ${y}`)
         if (y != 1 && y != row) {
             map = map.slice(0, -1) + vertical_frame2
+            //console.log(map)
         } else if (y == row) {
             map = map.slice() + bottom_left_corner2
+            //console.log(map)
         }
         for (j=0;j<col;j++){
+            //console.log(map)
             //console.log(`x : ${x}`)
             if (y == 1 || y == row) {
                 map += horizontal_frame
+                //console.log(map)
             } else if (player_x+1 == x && player_y+2 == y) {
-                map += facha
+                console.log(`current player x : ${player_x}`) //0
+                console.log(`current x : ${x}`) //1
+                console.log(`current y : ${player_y}`) //0
+                console.log(`current y : ${y}`) //2
+
+                console.log(`map x : ${map_x}`)
+                console.log(`map x : ${map_y}`)
+                if (player_x + 1 == map_x) {
+                    map = map.slice(0, -1)
+                    map += (facha + `:`)
+                } else {
+                    map += facha
+                }
+                //console.log(map)
             } else {
                 map += inside
+                //console.log(map)
             }
-            x++
+            ++x
         }
         x = 1
         if (y == 1) {
             map = map.slice(0, -1) + top_right_corner
-            y++
+            //console.log(map)
+            ++y
         } else if ( y == row) {
             map = map.slice(0, -1) + bottom_right_corner
-            y++
+            //console.log(map)
+            ++y
         } else {
             map = map.slice(0, -1) + vertical_frame
-            y++
+            //console.log(map)
+            ++y
         }
-
-        //map += "\n"
     }
-    //console.log(map.length)
     return map.toString()
 }
 

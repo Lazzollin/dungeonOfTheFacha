@@ -1,4 +1,3 @@
-// importing Discord.js
 const Discord = require('discord.js')
 const { BOT_TOKEN } = require('./token')
 const { levels } = require('./levels.js')
@@ -12,8 +11,8 @@ client.on('ready' , () => {
 let player_x = 0
 let player_y = 0
 
-let map_x = 10
-let map_y = 12
+let map_x = 13
+let map_y = 5
 
 let lvl_number = 1
 let lives = 3
@@ -21,21 +20,22 @@ let moves = 25
 
 const lvl = levels
 
-function currentLvl() {
-
-}
-
 client.on('message', msg => {
-    let coso = [msg.author.id, msg.author.username]
-    console.log(msg.content, coso);
     if (msg.content == `//play`){
         player_x = 0
-        player_y = 9
+        player_y = 0
         let currentUser = [msg.author.id, msg.author.username]
         console.log(msg.content, currentUser);
             msg.channel.send(buildMap(map_x, map_y)).then(async sentMessage => {
-                const messageID = sentMessage.id
-                sentMessage.react('➡')
+                controls(sentMessage, currentUser[0])
+            })
+    }
+});
+
+client.login(BOT_TOKEN)
+
+function controls(sentMessage, currentUserId) {
+    sentMessage.react('➡')
                 console.log('reacted with right arrow')
                 sentMessage.react('⬅')
                 console.log('reacted with left arrow')
@@ -44,14 +44,14 @@ client.on('message', msg => {
                 sentMessage.react('⬇')
                 console.log('reacted with down arrow')
 
-                const filter = (reaction, user) => user.id === currentUser[0] && (
+                const filter = (reaction, user) => user.id === currentUserId && (
                     reaction.emoji.name === '➡' ||
                     reaction.emoji.name === '⬅' ||
                     reaction.emoji.name === '⬆' ||
                     reaction.emoji.name === '⬇'
                 );
 
-                let collector = sentMessage.createReactionCollector(filter, { max: moves });
+                let collector = sentMessage.createReactionCollector(filter, { max: 2 });
                 collector.on('collect', (reaction, collector) => {
                     console.log('got a reaction')
                     switch (reaction.emoji.name) {
@@ -109,100 +109,58 @@ client.on('message', msg => {
                     deathMessage()
                     console.log(`lives: ${lives}`)
                 });
-            })
-    }
-});
-
-client.login(BOT_TOKEN)
-
+}
 function buildMap(col, row) {
     console.log(`map size is ${col} x ${row}`)
-/*
-    const top_right_corner = [`╗ `]
-    const top_left_corner = [`╔`]
-    const bottom_right_corner = [`╝`]
-    const bottom_left_corner = [`╚`]
-    const bottom_left_corner2 = [`╚`]
-    const horizontal_frame = [`══`]
-    const inside = [`░░`]
-    const vertical_frame = [`║ \n`]
-    const vertical_frame2 = [`\n║`]
-    const wall = [`██`]
-*/
 
-    const top_right_corner = [`╗ `]
-    const top_left_corner = [`╔`]
-    const bottom_right_corner = [`╝`]
-    const bottom_left_corner = [`╚`]
-    const horizontal_frame = [`══`]
-    const inside = [`░░`]
-    const vertical_frame = [`║ \n`]
-    const vertical_frame2 = [`\n║`]
-    const wall = [`<:spikes:752962691018129489>`]
+    const corner = `<:c:752966967912038500>`
+    const frame = `<:f:752966972467052606>`
+    const inside = `⬛`
+    const spike = `<:s:752962691018129489>`
+    const wall = `<:w:752966973809229875>`
 
-    //const ayy = client.emojis.cache.find(emoji => emoji.name === "soy_admin")
+    const facha = `😎`//<:sa:752951964051963994>`
 
-    const ayy = `<:soy_admin:752951964051963994>`
-
-    const facha = [`:sunglasses:`]
-
-    let map = [`${top_left_corner}`];
+    let map = []
     let x = 1
     let y = 1
     let wall_index = 0
+    let spike_index = 0
 
     for (i=0;i<row;i++) {
-        if (y != 1 && y != row) {
-            map = map.slice(0, -1) + vertical_frame2
-        } else if (y == row) {
-            map = map.slice() + bottom_left_corner
-        }
-        for (j=0;j<col;j++){
-            if (y == 1 || y == row) {
-                map += horizontal_frame
-            } else if (player_x+1 == x && player_y+2 == y) {
-                console.log(`current player x : ${player_x}`)
-                console.log(`current x : ${x}`)
-                console.log(`current y : ${player_y}`)
-                console.log(`map x : ${map_x}`)
-                console.log(`map x : ${map_y}`)
-
-                if (player_x + 1 == map_x) {
-                    map = map.slice(0, -1)
-                    map += (ayy + `:`)
-                } else {
-                    map += ayy
-                }
-            } else if (
-                lvl.lvl_1.walls.lvl_walls_x[wall_index] == x &&
-                 lvl.lvl_1.walls.lvl_walls_y[wall_index] + 1 == y
-            ) {
-                map += wall
-                wall_index ++
-            } else if (
-                lvl.lvl_1.walls.lvl_walls_x[wall_index] == x &&
-                 lvl.lvl_1.walls.lvl_walls_y[wall_index] + 1 == y
-            ) {
-                map += wall
-                wall_index ++
-            } else {
-                map += inside
-            }
-            ++x
-        }
         x = 1
-        if (y == 1) {
-            map = map.slice(0, -1) + top_right_corner
-            ++y
-        } else if ( y == row) {
-            map = map.slice(0, -1) + bottom_right_corner
-            ++y
-        } else {
-            map = map.slice(0, -1) + vertical_frame
-            ++y
+        if (y == 1 || y == map_y) {map += corner}
+        for (j=0;j<col;j++){
+            if (y == 1 || y == map_y) {
+                if (x + 1 == map_x) {
+                     map += corner 
+                     break
+                } else {
+                    map += frame
+                }
+            } else if (lvl.lvl_1.walls.lvl_walls_x[wall_index] == x &&
+                lvl.lvl_1.walls.lvl_walls_y[wall_index] + 1 == y)
+            {
+               map += wall
+               wall_index ++
+            } else if (lvl.lvl_1.spikes.lvl_spikes_x[spike_index] == x &&
+                lvl.lvl_1.spikes.lvl_spikes_y[spike_index] + 1 == y)
+            {
+               map += spike
+               spike_index ++
+            } else if (player_x + 2 == x && player_y + 2 == y) {
+                map += facha
+            } else if (x == 1 || x == map_x) {
+                map += frame
+            } else { map += inside }
+            console.log(x)
+            x ++
         }
+        y ++
+        map += ` \n`
     }
-    return buildInterface(lvl_number, lives, moves) + map.toString()
+    console.log(map.length)
+    return buildInterface(lvl_number, lives, moves) + map
 }
 function rightCollision(x, y) {
     let index = 0
@@ -277,11 +235,11 @@ function bottomCollision(x, y) {
     }
 }
 function buildInterface(lvl_number, lives, moves){
-    let interface = `\` [Lvl: ${lvl_number}  Lives: ${lives}  Moves: ${moves}] \` \n`
+    let interface = `\` [Lvl: ${lvl_number}  Lives: ${lives}  Moves: ${moves}] \`\n`
     return interface
 }
 
-function deathMessage(){
+function deathMessage() {
     return (new Discord.MessageEmbed()
         .setColor('#ff0000')
         .setTitle('sos malardo')

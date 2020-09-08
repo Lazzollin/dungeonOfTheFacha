@@ -51,7 +51,7 @@ client.on('message', msg => {
                     reaction.emoji.name === '⬇'
                 );
 
-                let collector = sentMessage.createReactionCollector(filter, { max: 2 });
+                let collector = sentMessage.createReactionCollector(filter, { max: moves });
                 collector.on('collect', (reaction, collector) => {
                     console.log('got a reaction')
                     switch (reaction.emoji.name) {
@@ -104,7 +104,10 @@ client.on('message', msg => {
                 });
                 collector.on('end', collected => {
                     console.log(`sin movimientos`);
-                    sentMessage.edit(deathMessage())
+                    lives--
+                    sentMessage.edit(buildInterface(lvl_number,lives,moves))
+                    deathMessage()
+                    console.log(`lives: ${lives}`)
                 });
             })
     }
@@ -278,7 +281,7 @@ function buildInterface(lvl_number, lives, moves){
     return interface
 }
 
-function deathMessage() {
+function deathMessage(){
     return (new Discord.MessageEmbed()
         .setColor('#ff0000')
         .setTitle('sos malardo')

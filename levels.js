@@ -11,7 +11,14 @@ module.exports = {
             },
             'obstacles': {
                 
-            }
+            },
+            'keys': {
+
+            },
+            'doors': {
+
+            },
+            'exit': { exit_x: 2, exit_y: 4}
         }
     }
 }

@@ -15,15 +15,25 @@ let player_y = 0
 let map_x = 10
 let map_y = 12
 
+let lvl_number = 1
+let lives = 3
+let moves = 25
+
 const lvl = levels
 
+function currentLvl() {
+
+}
+
 client.on('message', msg => {
-    if (msg.content === `//play`) {
+    let coso = [msg.author.id, msg.author.username]
+    console.log(msg.content, coso);
+    if (msg.content == `//play`){
         player_x = 0
         player_y = 9
         let currentUser = [msg.author.id, msg.author.username]
         console.log(msg.content, currentUser);
-            msg.channel.send(buildMap(map_x, map_y)).then(sentMessage => {
+            msg.channel.send(buildMap(map_x, map_y)).then(async sentMessage => {
                 const messageID = sentMessage.id
                 sentMessage.react('➡')
                 console.log('reacted with right arrow')
@@ -41,7 +51,7 @@ client.on('message', msg => {
                     reaction.emoji.name === '⬇'
                 );
 
-                let collector = sentMessage.createReactionCollector(filter, { time: 120000 });
+                let collector = sentMessage.createReactionCollector(filter, { max: moves });
                 collector.on('collect', (reaction, collector) => {
                     console.log('got a reaction')
                     switch (reaction.emoji.name) {
@@ -93,7 +103,11 @@ client.on('message', msg => {
                     }
                 });
                 collector.on('end', collected => {
-                    console.log(`collected ${collected.size} reactions`);
+                    console.log(`sin movimientos`);
+                    lives--
+                    sentMessage.edit(buildInterface(lvl_number,lives,moves))
+                    deathMessage()
+                    console.log(`lives: ${lives}`)
                 });
             })
     }
@@ -103,7 +117,7 @@ client.login(BOT_TOKEN)
 
 function buildMap(col, row) {
     console.log(`map size is ${col} x ${row}`)
-
+/*
     const top_right_corner = [`╗ `]
     const top_left_corner = [`╔`]
     const bottom_right_corner = [`╝`]
@@ -114,6 +128,22 @@ function buildMap(col, row) {
     const vertical_frame = [`║ \n`]
     const vertical_frame2 = [`\n║`]
     const wall = [`██`]
+*/
+
+    const top_right_corner = [`╗ `]
+    const top_left_corner = [`╔`]
+    const bottom_right_corner = [`╝`]
+    const bottom_left_corner = [`╚`]
+    const horizontal_frame = [`══`]
+    const inside = [`░░`]
+    const vertical_frame = [`║ \n`]
+    const vertical_frame2 = [`\n║`]
+    const wall = [`<:spikes:752962691018129489>`]
+
+    //const ayy = client.emojis.cache.find(emoji => emoji.name === "soy_admin")
+
+    const ayy = `<:soy_admin:752951964051963994>`
+
     const facha = [`:sunglasses:`]
 
     let map = [`${top_left_corner}`];
@@ -125,7 +155,7 @@ function buildMap(col, row) {
         if (y != 1 && y != row) {
             map = map.slice(0, -1) + vertical_frame2
         } else if (y == row) {
-            map = map.slice() + bottom_left_corner2
+            map = map.slice() + bottom_left_corner
         }
         for (j=0;j<col;j++){
             if (y == 1 || y == row) {
@@ -139,10 +169,16 @@ function buildMap(col, row) {
 
                 if (player_x + 1 == map_x) {
                     map = map.slice(0, -1)
-                    map += (facha + `:`)
+                    map += (ayy + `:`)
                 } else {
-                    map += facha
+                    map += ayy
                 }
+            } else if (
+                lvl.lvl_1.walls.lvl_walls_x[wall_index] == x &&
+                 lvl.lvl_1.walls.lvl_walls_y[wall_index] + 1 == y
+            ) {
+                map += wall
+                wall_index ++
             } else if (
                 lvl.lvl_1.walls.lvl_walls_x[wall_index] == x &&
                  lvl.lvl_1.walls.lvl_walls_y[wall_index] + 1 == y
@@ -166,7 +202,7 @@ function buildMap(col, row) {
             ++y
         }
     }
-    return map.toString()
+    return buildInterface(lvl_number, lives, moves) + map.toString()
 }
 function rightCollision(x, y) {
     let index = 0
@@ -239,4 +275,15 @@ function bottomCollision(x, y) {
     } else {
         return false
     }
+}
+function buildInterface(lvl_number, lives, moves){
+    let interface = `\` [Lvl: ${lvl_number}  Lives: ${lives}  Moves: ${moves}] \` \n`
+    return interface
+}
+
+function deathMessage(){
+    return (new Discord.MessageEmbed()
+        .setColor('#ff0000')
+        .setTitle('sos malardo')
+        .setURL('https://www.youtube.com/watch?v=OLpeX4RRo28'))
 }

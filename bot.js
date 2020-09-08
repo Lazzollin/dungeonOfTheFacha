@@ -15,9 +15,26 @@ let player_y = 0
 let map_x = 10
 let map_y = 12
 
+let timer = 120
+
 const lvl = levels
 
 client.on('message', msg => {
+    if (msg.content === `//text`){
+        console.log(msg.content, msg.author.username)
+        msg.channel.send(buildInterface(timer)).then(sentMessage =>{
+            timer = 120
+            let timeOut = setInterval(function(){
+                --timer
+                console.log(timer)
+                sentMessage.edit(buildInterface(timer))
+                if(timer == 0){
+                    clearInterval(timeOut)
+                    console.log("Time's out")
+                }
+            }, 1000)
+        })
+    }
     if (msg.content === `//play`) {
         player_x = 0
         player_y = 9
@@ -41,7 +58,7 @@ client.on('message', msg => {
                     reaction.emoji.name === '⬇'
                 );
 
-                let collector = sentMessage.createReactionCollector(filter, { time: 120000 });
+                let collector = sentMessage.createReactionCollector(filter, { time: timer * 1000 });
                 collector.on('collect', (reaction, collector) => {
                     console.log('got a reaction')
                     switch (reaction.emoji.name) {
@@ -239,4 +256,8 @@ function bottomCollision(x, y) {
     } else {
         return false
     }
+}
+function buildInterface(timer){
+    let interfaceTimer = `[Time: ${timer}]`
+    return interfaceTimer
 }

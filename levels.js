@@ -4,7 +4,8 @@ module.exports = {
             map_x: 10,
             map_y: 8,
             player_x: 0,
-            player_y: 9,
+            player_y: 0,
+            moves: 2,
             'walls': {
                 lvl_walls_x: [5,6,7],
                 lvl_walls_y: [2,2,2]

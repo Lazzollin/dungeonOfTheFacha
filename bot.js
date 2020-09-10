@@ -8,8 +8,6 @@ client.on('ready' , () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
 
-const lvl = levels
-
 let textures = {
     corner: `<:fr:753482361626296350>`,//`<:co:753481807684698264>`,
     frame: `<:fr:753482361626296350>`,
@@ -33,6 +31,20 @@ let textures = {
     bronze_door_facha: `<:bdf:753638706040012850>`,
 }
 
+let lvl_number = 1
+let lvl = levels.lvl_1
+
+function setLvl() {
+    switch (lvl_number) {
+        case 1:
+            lvl = levels.lvl_1
+            break
+        case 2:
+            lvl = levels.lvl_2
+            break
+    }
+}
+
 let has_golden_key = false
 let has_silver_key = false
 let has_bronze_key = false
@@ -43,20 +55,27 @@ let bronze_door_opened = false
 let player_x = 0
 let player_y = 0
 
-let map_x = lvl.lvl_1.map_x
-let map_y = lvl.lvl_1.map_y
+let map_x = lvl.map_x
+let map_y = lvl.map_y
 
-let lvl_number = 1
 let lives = 3
 let moves = 0
+let win = false
 
 let currentUser = []
 
 client.on('message', msg => {
     if (msg.content == `//play`){
-        moves = lvl.lvl_1.moves
-        player_x = lvl.lvl_1.player_x
-        player_y = lvl.lvl_1.player_y
+        player_x = lvl.player_x
+        player_y = lvl.player_y
+        moves = lvl.moves
+        lives = 3
+        has_golden_key = false
+        has_silver_key = false
+        has_bronze_key = false
+        golden_door_opened = false
+        silver_door_opened = false
+        bronze_door_opened = false
         currentUser = [msg.author.id, msg.author.username, msg.author]
         console.log(msg.content, currentUser);
             msg.channel.send(buildMap(map_x, map_y)).then(async sentMessage => {
@@ -68,10 +87,10 @@ client.on('message', msg => {
 client.login(BOT_TOKEN)
 
 function controls(sentMessage, currentUserId) {
-    sentMessage.react('➡')
-    console.log('reacted with right arrow')
     sentMessage.react('⬅')
     console.log('reacted with left arrow')
+    sentMessage.react('➡')
+    console.log('reacted with right arrow')
     sentMessage.react('⬆')
     console.log('reacted with up arrow')
     sentMessage.react('⬇')
@@ -87,6 +106,7 @@ function controls(sentMessage, currentUserId) {
     let collector = sentMessage.createReactionCollector(filter, { max: moves });
     collector.on('collect', (reaction, collectorr) => {
         console.log('got a reaction')
+
         if (moves == 0) {collector.stop('https://www.youtube.com/watch?v=OLpeX4RRo28')}
         switch (reaction.emoji.name) {
             case '➡':
@@ -204,7 +224,7 @@ function controls(sentMessage, currentUserId) {
                 } else {
                     console.log('go down')
                     console.log(`changed player y to : ${player_y + 1}`)
-                    if (isInSpike(player_x + 1, player_y, 'down')) {
+                    if (isInSpike(player_x, player_y, 'down')) {
                         console.log('is in spike')
                         moves--
                     }
@@ -231,10 +251,68 @@ function controls(sentMessage, currentUserId) {
                     break;
                 }
         }
+        if (lvl.exit.exit_x == player_x + 2 &&
+            lvl.exit.exit_y == player_y + 2) {
+                win = true
+                collector.stop('https://www.youtube.com/watch?v=OLpeX4RRo28')
+        }
     });
 
     collector.on('end', collected => {
-        if (lives == 1){
+        if (win == true) {
+            sentMessage.edit(buildMap(map_x, map_y)) // buildInterface(lvl_number,lives,moves))
+            .then(sentMessage.channel.send(winMessage())
+            .then( sentMessage => {setTimeout(() => { sentMessage.delete() }, 15000)}))
+            .then( sentMessage => {
+                sentMessage.react('⏩')
+                console.log('reacted with repeat')
+                sentMessage.react('❌')
+                console.log('reacted with cross')
+
+                const repeatFilter = (reaction, user) => user.id === currentUserId && (
+                    reaction.emoji.name === '⏩' ||
+                    reaction.emoji.name === '❌'
+                );
+
+                let collector = sentMessage.createReactionCollector(repeatFilter, { time: 25000 });
+                collector.on('collect', (reaction, collector) => {
+                    console.log('got a reaction')
+                    switch (reaction.emoji.name) {
+                        case '⏩':
+                            if (lvl_number == 2) {
+                                sentMessage.delete()
+                                sentMessage.channel.send(new Discord.MessageEmbed()
+                                .setColor('#ff0000')
+                                .setTitle(`${currentUser[1]} Flaco es la beta no tenemos mas niveles calmate crack fiera mastodonte cosmico citroneta overclockeada`)
+                                .setURL('https://www.youtube.com/watch?v=dQw4w9WgXcQ'))
+                                .then( sentMessage => {setTimeout(() => { sentMessage.delete() }, 15000)})
+                                break
+                            } else {
+                                lvl_number++
+                                setLvl()
+                            }
+                            sentMessage.delete()
+                            player_x = lvl.player_x
+                            player_y = lvl.player_y
+                            moves = lvl.moves
+                            has_golden_key = false
+                            has_silver_key = false
+                            has_bronze_key = false
+                            golden_door_opened = false
+                            silver_door_opened = false
+                            bronze_door_opened = false
+                            sentMessage.channel.send(buildMap(map_x, map_y))
+                            .then(async sentMessage => {
+                                controls(sentMessage, currentUserId)
+                            })
+                            break
+                        case '❌':
+                            sentMessage.delete()
+                            break
+                    }
+                })
+            })
+        } else if (lives == 1){
             sentMessage.delete()
             sentMessage.channel.send(new Discord.MessageEmbed()
                 .setColor('#ff0000')
@@ -264,9 +342,9 @@ function controls(sentMessage, currentUserId) {
                     switch (reaction.emoji.name) {
                         case '🔁':
                             sentMessage.delete()
-                            player_x = lvl.lvl_1.player_x
-                            player_y = lvl.lvl_1.player_y
-                            moves = lvl.lvl_1.moves
+                            player_x = lvl.player_x
+                            player_y = lvl.player_y
+                            moves = lvl.moves
                             has_golden_key = false
                             has_silver_key = false
                             has_bronze_key = false
@@ -314,97 +392,97 @@ function buildMap(col, row) {
                     map += textures.frame
                 }
                 // render walls \/
-            } else if (lvl.lvl_1.walls.lvl_walls_x[wall_index] == x &&
-                lvl.lvl_1.walls.lvl_walls_y[wall_index] == y)
+            } else if (lvl.walls.lvl_walls_x[wall_index] == x &&
+                lvl.walls.lvl_walls_y[wall_index] == y)
             {
-               map += textures.wall
+               map += textures.frame
                wall_index ++
                // render angry facha on spikes \/
-            } else if (lvl.lvl_1.spikes.lvl_spikes_x[spike_index] == x &&
-                lvl.lvl_1.spikes.lvl_spikes_y[spike_index] == y &&
+            } else if (lvl.spikes.lvl_spikes_x[spike_index] == x &&
+                lvl.spikes.lvl_spikes_y[spike_index] == y &&
                 player_x + 2 == x && player_y + 2 == y)
             {
                map += textures.angry_facha
                spike_index ++
                // render spikes \/
-            } else if (lvl.lvl_1.spikes.lvl_spikes_x[spike_index] == x &&
-                lvl.lvl_1.spikes.lvl_spikes_y[spike_index] == y)
+            } else if (lvl.spikes.lvl_spikes_x[spike_index] == x &&
+                lvl.spikes.lvl_spikes_y[spike_index] == y)
             {
                map += textures.spike
                spike_index ++
                // render player on opened golden door \/
-            } else if (lvl.lvl_1.doors.golden_door_x == x &&
-                lvl.lvl_1.doors.golden_door_y == y &&
+            } else if (lvl.doors.golden_door_x == x &&
+                lvl.doors.golden_door_y == y &&
                 player_x + 2 == x && player_y + 2 == y)
             {
                map += textures.golden_door_facha
                // render player on opened silver door \/
-            } else if (lvl.lvl_1.doors.silver_door_x == x &&
-                lvl.lvl_1.doors.silver_door_y == y &&
+            } else if (lvl.doors.silver_door_x == x &&
+                lvl.doors.silver_door_y == y &&
                 player_x + 2 == x && player_y + 2 == y)
             {
                map += textures.silver_door_facha
                // render player on opened bronze door \/
-            } else if (lvl.lvl_1.doors.bronze_door_x == x &&
-                lvl.lvl_1.doors.bronze_door_y == y &&
+            } else if (lvl.doors.bronze_door_x == x &&
+                lvl.doors.bronze_door_y == y &&
                 player_x + 2 == x && player_y + 2 == y)
             {
                map += textures.bronze_door_facha
                // render golden door opened \/
-            } else if (lvl.lvl_1.doors.golden_door_x == x &&
-                lvl.lvl_1.doors.golden_door_y == y &&
+            } else if (lvl.doors.golden_door_x == x &&
+                lvl.doors.golden_door_y == y &&
                 golden_door_opened == true)
             {
                map += textures.golden_door_open
                // render silver door opened\/
-            } else if (lvl.lvl_1.doors.silver_door_x == x &&
-                lvl.lvl_1.doors.silver_door_y == y &&
+            } else if (lvl.doors.silver_door_x == x &&
+                lvl.doors.silver_door_y == y &&
                 silver_door_opened == true)
             {
                map += textures.silver_door_open
                // render bronze door opened \/
-            } else if (lvl.lvl_1.doors.bronze_door_x == x &&
-                lvl.lvl_1.doors.bronze_door_y == y &&
+            } else if (lvl.doors.bronze_door_x == x &&
+                lvl.doors.bronze_door_y == y &&
                 bronze_door_opened == true)
             {
                map += textures.bronze_door_open
                // render golden door \/
-            } else if (lvl.lvl_1.doors.golden_door_x == x &&
-                lvl.lvl_1.doors.golden_door_y == y)
+            } else if (lvl.doors.golden_door_x == x &&
+                lvl.doors.golden_door_y == y)
             {
                map += textures.golden_door
                 // render silver door \/
-            } else if (lvl.lvl_1.doors.silver_door_x == x &&
-                lvl.lvl_1.doors.silver_door_y == y)
+            } else if (lvl.doors.silver_door_x == x &&
+                lvl.doors.silver_door_y == y)
             {
                map += textures.silver_door
                // render bronze door \/
-            } else if (lvl.lvl_1.doors.bronze_door_x == x &&
-                lvl.lvl_1.doors.bronze_door_y == y)
+            } else if (lvl.doors.bronze_door_x == x &&
+                lvl.doors.bronze_door_y == y)
             {
                map += textures.bronze_door
                // render golden key \/
-            } else if (lvl.lvl_1.keys.golden_key_x == x &&
-                lvl.lvl_1.keys.golden_key_y == y && has_golden_key == false)
+            } else if (lvl.keys.golden_key_x == x &&
+                lvl.keys.golden_key_y == y && has_golden_key == false)
             {
                map += textures.golden_key
                // render silver key \/
-            } else if (lvl.lvl_1.keys.silver_key_x == x &&
-                lvl.lvl_1.keys.silver_key_y == y && has_silver_key == false)
+            } else if (lvl.keys.silver_key_x == x &&
+                lvl.keys.silver_key_y == y && has_silver_key == false)
             {
                map += textures.silver_key
                // render bronze key \/
-            } else if (lvl.lvl_1.keys.bronze_key_x == x &&
-                lvl.lvl_1.keys.bronze_key_y == y && has_bronze_key == false)
+            } else if (lvl.keys.bronze_key_x == x &&
+                lvl.keys.bronze_key_y == y && has_bronze_key == false)
             {
                map += textures.bronze_key
                // render facha \/
-            } else if (lvl.lvl_1.exit.exit_x == x &&
-                lvl.lvl_1.exit.exit_y == y &&
+            } else if (lvl.exit.exit_x == x &&
+                lvl.exit.exit_y == y &&
                 player_x + 2 == x && player_y + 2 == y) {
                 map += textures.happy_facha
-            } else if (lvl.lvl_1.exit.exit_x == x &&
-                lvl.lvl_1.exit.exit_y == y) {
+            } else if (lvl.exit.exit_x == x &&
+                lvl.exit.exit_y == y) {
                 map += textures.exit
             } else if (player_x + 2 == x && player_y + 2 == y) {
                 map += facha
@@ -423,23 +501,23 @@ function buildMap(col, row) {
 
 function rightCollision(x, y) {
     let index = 0
-    const limit = lvl.lvl_1.walls.lvl_walls_x.length
+    const limit = lvl.walls.lvl_walls_x.length
 
     let collisions = 0
 
     while (index < limit) {
-        if (x + 3 == lvl.lvl_1.walls.lvl_walls_x[index] &&
-            y + 2 == lvl.lvl_1.walls.lvl_walls_y[index] ||
-            (x + 3 == lvl.lvl_1.doors.golden_door_x &&
-            y + 2 == lvl.lvl_1.doors.golden_door_y &&
+        if (x + 3 == lvl.walls.lvl_walls_x[index] &&
+            y + 2 == lvl.walls.lvl_walls_y[index] ||
+            (x + 3 == lvl.doors.golden_door_x &&
+            y + 2 == lvl.doors.golden_door_y &&
             has_golden_key == false
             ) || 
-            (x + 3 == lvl.lvl_1.doors.silver_door_x &&
-            y + 2 == lvl.lvl_1.doors.silver_door_y &&
+            (x + 3 == lvl.doors.silver_door_x &&
+            y + 2 == lvl.doors.silver_door_y &&
             has_silver_key == false
             ) || 
-            (x + 3 == lvl.lvl_1.doors.bronze_door_x &&
-            y + 2 == lvl.lvl_1.doors.bronze_door_y &&
+            (x + 3 == lvl.doors.bronze_door_x &&
+            y + 2 == lvl.doors.bronze_door_y &&
             has_bronze_key == false
             )
         ) { collisions ++ }
@@ -454,23 +532,23 @@ function rightCollision(x, y) {
 
 function leftCollision(x, y) {
     let index = 0
-    const limit = lvl.lvl_1.walls.lvl_walls_x.length
+    const limit = lvl.walls.lvl_walls_x.length
 
     let collisions = 0
 
     while (index < limit) {
-        if (x + 1 == lvl.lvl_1.walls.lvl_walls_x[index] &&
-            y + 2  == lvl.lvl_1.walls.lvl_walls_y[index] ||
-            (x + 1 == lvl.lvl_1.doors.golden_door_x &&
-            y + 2 == lvl.lvl_1.doors.golden_door_y &&
+        if (x + 1 == lvl.walls.lvl_walls_x[index] &&
+            y + 2  == lvl.walls.lvl_walls_y[index] ||
+            (x + 1 == lvl.doors.golden_door_x &&
+            y + 2 == lvl.doors.golden_door_y &&
             has_golden_key == false
             ) || 
-            (x + 1 == lvl.lvl_1.doors.silver_door_x &&
-            y + 2 == lvl.lvl_1.doors.silver_door_y &&
+            (x + 1 == lvl.doors.silver_door_x &&
+            y + 2 == lvl.doors.silver_door_y &&
             has_silver_key == false
             ) || 
-            (x + 1 == lvl.lvl_1.doors.bronze_door_x &&
-            y + 2 == lvl.lvl_1.doors.bronze_door_y &&
+            (x + 1 == lvl.doors.bronze_door_x &&
+            y + 2 == lvl.doors.bronze_door_y &&
             has_bronze_key == false
             )
         ) { collisions ++ }
@@ -485,23 +563,23 @@ function leftCollision(x, y) {
 
 function topCollision(x, y) {
     let index = 0
-    const limit = lvl.lvl_1.walls.lvl_walls_x.length
+    const limit = lvl.walls.lvl_walls_x.length
 
     let collisions = 0
 
     while (index < limit) {
-        if (x + 2 == lvl.lvl_1.walls.lvl_walls_x[index] &&
-            y + 1 == lvl.lvl_1.walls.lvl_walls_y[index] ||
-            (x + 2 == lvl.lvl_1.doors.golden_door_x &&
-            y + 1 == lvl.lvl_1.doors.golden_door_y &&
+        if (x + 2 == lvl.walls.lvl_walls_x[index] &&
+            y + 1 == lvl.walls.lvl_walls_y[index] ||
+            (x + 2 == lvl.doors.golden_door_x &&
+            y + 1 == lvl.doors.golden_door_y &&
             has_golden_key == false
             ) || 
-            (x + 2 == lvl.lvl_1.doors.silver_door_x &&
-            y + 1 == lvl.lvl_1.doors.silver_door_y &&
+            (x + 2 == lvl.doors.silver_door_x &&
+            y + 1 == lvl.doors.silver_door_y &&
             has_silver_key == false
             ) || 
-            (x + 2 == lvl.lvl_1.doors.bronze_door_x &&
-            y + 1 == lvl.lvl_1.doors.bronze_door_y &&
+            (x + 2 == lvl.doors.bronze_door_x &&
+            y + 1 == lvl.doors.bronze_door_y &&
             has_bronze_key == false
             )
         ) { collisions ++}
@@ -516,23 +594,23 @@ function topCollision(x, y) {
 
 function bottomCollision(x, y) {
     let index = 0
-    const limit = lvl.lvl_1.walls.lvl_walls_x.length
+    const limit = lvl.walls.lvl_walls_x.length
 
     let collisions = 0
 
     while (index < limit) {
-        if (x + 2 == lvl.lvl_1.walls.lvl_walls_x[index] &&
-            y + 3 == lvl.lvl_1.walls.lvl_walls_y[index] ||
-            (x + 2 == lvl.lvl_1.doors.golden_door_x &&
-            y + 3 == lvl.lvl_1.doors.golden_door_y &&
+        if (x + 2 == lvl.walls.lvl_walls_x[index] &&
+            y + 3 == lvl.walls.lvl_walls_y[index] ||
+            (x + 2 == lvl.doors.golden_door_x &&
+            y + 3 == lvl.doors.golden_door_y &&
             has_golden_key == false
             ) || 
-            (x + 2 == lvl.lvl_1.doors.silver_door_x &&
-            y + 3 == lvl.lvl_1.doors.silver_door_y &&
+            (x + 2 == lvl.doors.silver_door_x &&
+            y + 3 == lvl.doors.silver_door_y &&
             has_silver_key == false
             ) || 
-            (x + 2 == lvl.lvl_1.doors.bronze_door_x &&
-            y + 3 == lvl.lvl_1.doors.bronze_door_y &&
+            (x + 2 == lvl.doors.bronze_door_x &&
+            y + 3 == lvl.doors.bronze_door_y &&
             has_bronze_key == false
             )
         ) { collisions ++ }
@@ -574,6 +652,14 @@ function buildInterface(lvl_number, lives, moves) {
     return myInterface
 }
 
+function winMessage() {
+    return (new Discord.MessageEmbed()
+        .setColor('#ff0000')
+        .setTitle(`${currentUser[1]} buena tula`)
+        .setURL('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+        .addField ('Extraordinario', `${currentUser[2]} tamaño del tronco muy impactante`))
+}
+
 function deathMessage() {
     return (new Discord.MessageEmbed()
         .setColor('#ff0000')
@@ -584,7 +670,7 @@ function deathMessage() {
 
 function isInSpike(x, y, s) {
     let index = 0
-    const limit = lvl.lvl_1.spikes.lvl_spikes_x.length
+    const limit = lvl.spikes.lvl_spikes_x.length
 
     let collisions = 0
 
@@ -611,8 +697,8 @@ function isInSpike(x, y, s) {
     }
 
     while (index < limit) {
-        if (s_x == lvl.lvl_1.spikes.lvl_spikes_x[index] &&
-            s_y == lvl.lvl_1.spikes.lvl_spikes_y[index]
+        if (s_x == lvl.spikes.lvl_spikes_x[index] &&
+            s_y == lvl.spikes.lvl_spikes_y[index]
         ) { collisions ++ }
         index++
     }
@@ -624,31 +710,31 @@ function isInSpike(x, y, s) {
 }
 
 function takeKey(x, y) {
-    if (x + 2 == lvl.lvl_1.keys.golden_key_x &&
-        y + 2 == lvl.lvl_1.keys.golden_key_y) {
+    if (x + 2 == lvl.keys.golden_key_x &&
+        y + 2 == lvl.keys.golden_key_y) {
             return 'gold'
     }
-    if (x + 2 == lvl.lvl_1.keys.silver_key_x &&
-        y + 2 == lvl.lvl_1.keys.silver_key_y) {
+    if (x + 2 == lvl.keys.silver_key_x &&
+        y + 2 == lvl.keys.silver_key_y) {
             return 'silver'
     }
-    if (x + 2 == lvl.lvl_1.keys.bronze_key_x &&
-        y + 2 == lvl.lvl_1.keys.bronze_key_y) {
+    if (x + 2 == lvl.keys.bronze_key_x &&
+        y + 2 == lvl.keys.bronze_key_y) {
             return 'bronze'
     }
 }
 
 function openDoor(x, y) {
-    if (x + 2 == lvl.lvl_1.doors.golden_door_x &&
-        y + 2 == lvl.lvl_1.doors.golden_door_y) {
+    if (x + 2 == lvl.doors.golden_door_x &&
+        y + 2 == lvl.doors.golden_door_y) {
             return 'gold'
     }
-    if (x + 2 == lvl.lvl_1.doors.silver_door_x &&
-        y + 2 == lvl.lvl_1.doors.silver_door_y) {
+    if (x + 2 == lvl.doors.silver_door_x &&
+        y + 2 == lvl.doors.silver_door_y) {
             return 'silver'
     }
-    if (x + 2 == lvl.lvl_1.doors.bronze_door_x &&
-        y + 2 == lvl.lvl_1.doors.bronze_door_y) {
+    if (x + 2 == lvl.doors.bronze_door_x &&
+        y + 2 == lvl.doors.bronze_door_y) {
             return 'bronze'
     }
 }

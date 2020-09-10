@@ -1,6 +1,6 @@
 const Discord = require('discord.js')
 const { BOT_TOKEN } = require('./token')
-const { levels } = require('./levels.js')
+const { levels } = require('./levels')
 
 client = new Discord.Client();
 
@@ -8,25 +8,44 @@ client.on('ready' , () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
 
+const lvl = levels
+
+let textures = {
+    corner: `<:co:753376477671588012>`,
+    frame: `<:fr:753342233360597016>`,
+    inside: `⬛`,
+    spike: `<:sp:752962691018129489>`,
+    wall: `<:wa:752966973809229875>`,
+    angry_facha: `<:af:753010581933523104>`,
+    golden_key: `<:gk:753301383897153646>`,
+    silver_key: `<:sk:753301383310213200>`,
+    bronze_key: `<:bk:753301379329556600>`,
+    golden_door: `<:gd:753459639177183302>`,
+    silver_door: `<:sd:753456787520487552>`,
+    bronze_door: `<:bd:753456786555535420>`,
+}
+
+let hasGoldenKey = false
+let hasSilverKey = false
+let hasBronzeKey = false
+
 let player_x = 0
 let player_y = 0
 
-let map_x = 13
-let map_y = 5
+let map_x = lvl.lvl_1.map_x
+let map_y = lvl.lvl_1.map_y
 
 let lvl_number = 1
 let lives = 3
-let moves = 2
-
-const lvl = levels
+let moves = 0
 
 let currentUser = []
 
 client.on('message', msg => {
     if (msg.content == `//play`){
-        moves = 2
-        player_x = 0
-        player_y = 0
+        moves = lvl.lvl_1.moves
+        player_x = lvl.lvl_1.player_x
+        player_y = lvl.lvl_1.player_y
         currentUser = [msg.author.id, msg.author.username, msg.author]
         console.log(msg.content, currentUser);
             msg.channel.send(buildMap(map_x, map_y)).then(async sentMessage => {
@@ -55,67 +74,78 @@ function controls(sentMessage, currentUserId) {
     );
 
     let collector = sentMessage.createReactionCollector(filter, { max: moves });
-    collector.on('collect', (reaction, collector) => {
+    collector.on('collect', (reaction, collectorr) => {
         console.log('got a reaction')
+        if (moves == 0) {collector.stop('https://www.youtube.com/watch?v=OLpeX4RRo28')}
         switch (reaction.emoji.name) {
             case '➡':
                 moves--
+                sentMessage.reactions.resolve('➡').users.remove(currentUser[0])
                 if (player_x + 3 == map_x || rightCollision(player_x, player_y)) {
                     console.log('can\'t go right')
                     break;
                 } else {
-                    ++player_x
-                    reaction.user
                     console.log('go right')
-                    console.log(`changed player x to : ${player_x}`)
-                    if (isInSpike(player_x, player_y, 1) == true) {
+                    console.log(`changed player x to : ${player_x + 1}`)
+                    if (isInSpike(player_x, player_y, 'right') == true) {
+                        console.log('is in spike')
+                        moves--
+                    } else if (rightTakeKey(player_x, player_y) == true) {
+                        console.log('is in spike')
                         moves--
                     }
+                    ++player_x
                     sentMessage.edit(buildMap(map_x, map_y))
                     break;
                 }
             case '⬅':
                 moves--
+                sentMessage.reactions.resolve('⬅').users.remove(currentUser[0])
                 if (player_x == 0 || leftCollision(player_x, player_y)) {
                     console.log('can\'t go left')
                     break;
                 } else {
-                    --player_x
                     console.log('go left')
-                    console.log(`changed player x to : ${player_x}`)
-                    if (isInSpike(player_x, player_y, 2)) {
+                    console.log(`changed player x to : ${player_x - 1}`)
+                    if (isInSpike(player_x, player_y, 'left')) {
+                        console.log('is in spike')
                         moves--
                     }
+                    --player_x
                     sentMessage.edit(buildMap(map_x, map_y))
                     break;
                 }
             case '⬆':
                 moves--
+                sentMessage.reactions.resolve('⬆').users.remove(currentUser[0])
                 if (player_y == 0 || topCollision(player_x, player_y)) {
                     console.log('can\'t go up')
                     break
                 } else {
-                    --player_y
                     console.log('go up')
-                    console.log(`changed player y to : ${player_y}`)
-                    if (isInSpike(player_x, player_y, 3)) {
+                    console.log(`changed player y to : ${player_y - 1}`)
+                    if (isInSpike(player_x, player_y, 'up')) {
+                        console.log('is in spike')
                         moves--
                     }
+                    --player_y
                     sentMessage.edit(buildMap(map_x, map_y))
                     break
                 }
             case '⬇':
                 moves--
+                sentMessage.reactions.resolve('⬇').users.remove(currentUser[0])
                 if (player_y + 3 == map_y || bottomCollision(player_x, player_y)) {
                     console.log('can\'t go down')
                     break;
                 } else {
-                    ++player_y
                     console.log('go down')
-                    console.log(`changed player y to : ${player_y}`)
-                    if (isInSpike(player_x, player_y, 4)) {
+                    console.log(`changed player y to : ${player_y + 1}`)
+                    if (isInSpike(player_x, player_y, 'down')) {
+                        console.log('is in spike')
                         moves--
                     }
+                    ++player_y
                     sentMessage.edit(buildMap(map_x, map_y))
                     break;
                 }
@@ -127,8 +157,8 @@ function controls(sentMessage, currentUserId) {
             sentMessage.channel.send(new Discord.MessageEmbed()
                 .setColor('#ff0000')
                 .setTitle(`${currentUser[1]} jajaj sos muy malardo`)
-                .setURL('https://www.youtube.com/watch?v=SJXiZrTiNe0')
-                .then( sentMessage => {setTimeout(() => { sentMessage.delete() }, 15000)}))
+                .setURL('https://www.youtube.com/watch?v=SJXiZrTiNe0'))
+                .then( sentMessage => {setTimeout(() => { sentMessage.delete() }, 15000)})
         } else {
             console.log(`sin movimientos`);
             lives--
@@ -146,7 +176,7 @@ function controls(sentMessage, currentUserId) {
                     reaction.emoji.name === '❌'
                 );
 
-                let collector = sentMessage.createReactionCollector(repeatFilter, { max: moves });
+                let collector = sentMessage.createReactionCollector(repeatFilter, { time: 25000 });
                 collector.on('collect', (reaction, collector) => {
                     console.log('got a reaction')
                     switch (reaction.emoji.name) {
@@ -172,14 +202,7 @@ function controls(sentMessage, currentUserId) {
 }
 function buildMap(col, row) {
     console.log(`map size is ${col} x ${row}`)
-
-    const corner = `<:c:752966967912038500>`
-    const frame = `<:f:752966972467052606>`
-    const inside = `⬛`
-    const spike = `<:s:752962691018129489>`
-    const wall = `<:w:752966973809229875>`
-    const angry_facha = `<:af:753010581933523104>`
-
+    
     const facha = `😎`//<:sa:752951964051963994>`
 
     let map = []
@@ -191,36 +214,72 @@ function buildMap(col, row) {
     for (i=0;i<row;i++) {
         x = 1
         console.log(y)
-        if (y == 1 || y == map_y) {map += corner}
+        if (y == 1 || y == map_y) {map += textures.corner}
         for (j=0;j<col;j++){
             if (y == 1 || y == map_y) {
+                // render the main frame \/
                 if (x + 1 == map_x) {
-                     map += corner 
+                     map += textures.corner 
                      break
                 } else {
-                    map += frame
+                    map += textures.frame
                 }
+                // render walls \/
             } else if (lvl.lvl_1.walls.lvl_walls_x[wall_index] == x &&
-                lvl.lvl_1.walls.lvl_walls_y[wall_index] + 1 == y)
+                lvl.lvl_1.walls.lvl_walls_y[wall_index] == y)
             {
-               map += wall
+               map += textures.wall
                wall_index ++
+               // render angry facha on spikes \/
             } else if (lvl.lvl_1.spikes.lvl_spikes_x[spike_index] == x &&
-                lvl.lvl_1.spikes.lvl_spikes_y[spike_index] + 1 == y &&
+                lvl.lvl_1.spikes.lvl_spikes_y[spike_index] == y &&
                 player_x + 2 == x && player_y + 2 == y)
             {
-               map += angry_facha
+               map += textures.angry_facha
                spike_index ++
-            }else if (lvl.lvl_1.spikes.lvl_spikes_x[spike_index] == x &&
-                lvl.lvl_1.spikes.lvl_spikes_y[spike_index] + 1 == y)
+               // render spikes \/
+            } else if (lvl.lvl_1.spikes.lvl_spikes_x[spike_index] == x &&
+                lvl.lvl_1.spikes.lvl_spikes_y[spike_index] == y)
             {
-               map += spike
+               map += textures.spike
                spike_index ++
+               // render golden door \/
+            } else if (lvl.lvl_1.doors.golden_door_x == x &&
+                lvl.lvl_1.doors.golden_door_y == y)
+            {
+               map += textures.golden_door
+                // render silver door \/
+            } else if (lvl.lvl_1.doors.silver_door_x == x &&
+                lvl.lvl_1.doors.silver_door_y == y)
+            {
+               map += textures.silver_door
+               // render bronze door \/
+            } else if (lvl.lvl_1.doors.bronze_door_x == x &&
+                lvl.lvl_1.doors.bronze_door_y == y)
+            {
+               map += textures.bronze_door
+               // render golden key \/
+            } else if (lvl.lvl_1.keys.golden_key_x == x &&
+                lvl.lvl_1.keys.golden_key_y == y)
+            {
+               map += textures.golden_key
+               // render silver key \/
+            } else if (lvl.lvl_1.keys.silver_key_x == x &&
+                lvl.lvl_1.keys.silver_key_y == y)
+            {
+               map += textures.silver_key
+               // render bronze key \/
+            } else if (lvl.lvl_1.keys.bronze_key_x == x &&
+                lvl.lvl_1.keys.bronze_key_y == y)
+            {
+               map += textures.bronze_key
+               // render facha \/
             } else if (player_x + 2 == x && player_y + 2 == y) {
                 map += facha
             } else if (x == 1 || x == map_x) {
-                map += frame
-            } else { map += inside }
+                // render the rest of the frame
+                map += textures.frame
+            } else { map += textures.inside }
             x ++
         }
         y ++
@@ -237,7 +296,7 @@ function rightCollision(x, y) {
 
     while (index < limit) {
         if (x + 3 == lvl.lvl_1.walls.lvl_walls_x[index] &&
-            y + 1  == lvl.lvl_1.walls.lvl_walls_y[index]
+            y + 2 == lvl.lvl_1.walls.lvl_walls_y[index]
         ) { collisions ++ }
         index++
     }
@@ -254,8 +313,8 @@ function leftCollision(x, y) {
     let collisions = 0
 
     while (index < limit) {
-        if (x == lvl.lvl_1.walls.lvl_walls_x[index] &&
-            y + 1  == lvl.lvl_1.walls.lvl_walls_y[index]
+        if (x + 1 == lvl.lvl_1.walls.lvl_walls_x[index] &&
+            y + 2  == lvl.lvl_1.walls.lvl_walls_y[index]
         ) { collisions ++ }
         index++
     }
@@ -272,8 +331,8 @@ function topCollision(x, y) {
     let collisions = 0
 
     while (index < limit) {
-        if (x - 3 == lvl.lvl_1.walls.lvl_walls_x[index] &&
-            y == lvl.lvl_1.walls.lvl_walls_y[index]
+        if (x + 2 == lvl.lvl_1.walls.lvl_walls_x[index] &&
+            y + 1 == lvl.lvl_1.walls.lvl_walls_y[index]
         ) { collisions ++}
         index++
     }
@@ -291,7 +350,7 @@ function bottomCollision(x, y) {
 
     while (index < limit) {
         if (x + 2 == lvl.lvl_1.walls.lvl_walls_x[index] &&
-            y + 2  == lvl.lvl_1.walls.lvl_walls_y[index]
+            y + 3 == lvl.lvl_1.walls.lvl_walls_y[index]
         ) { collisions ++ }
         index++
     }
@@ -302,8 +361,21 @@ function bottomCollision(x, y) {
     }
 }
 function buildInterface(lvl_number, lives, moves){
-    let interface = `\` [Lvl: ${lvl_number}  Lives: ${lives}  Moves: ${moves}] \`\n`
-    return interface
+    let s = ''
+    let index = 0
+
+    while (index < lives) {
+        s += '💙'
+        index ++
+    }
+
+    if (moves == 0) {
+        let interface = `\` [${s} | Lvl: ${lvl_number} | Moves: X] \`\n`
+        return interface
+    } else {
+        let interface = `\` [${s} | Lvl: ${lvl_number} | Moves: ${moves}] \`\n`
+        return interface
+    }
 }
 
 function deathMessage() {
@@ -324,25 +396,99 @@ function isInSpike(x, y, s) {
     let s_y = y
 
     switch (s) {
-        case 1:
+        case 'right':
+            s_x += 3
+            s_y += 2
+            break
+        case 'left':
+            s_x += 1
+            s_y += 2
+            break
+        case 'up':
             s_x += 2
             s_y += 1
             break
-        case 2:
-            s_y += 1
-            break
-        case 3:
-            s_x += 1
-            break
-        case 4:
-            s_x += 1
-            s_y += 2
+        case 'down':
+            s_x += 2
+            s_y += 3
             break
     }
 
     while (index < limit) {
         if (s_x == lvl.lvl_1.spikes.lvl_spikes_x[index] &&
             s_y == lvl.lvl_1.spikes.lvl_spikes_y[index]
+        ) { collisions ++ }
+        index++
+    }
+    if (collisions != 0) {
+        return true
+    } else {
+        return false
+    }
+}
+function rightTakeKey(x, y) {
+    let index = 0
+    const limit = lvl.lvl_1.walls.lvl_walls_x.length
+
+    let collisions = 0
+
+    while (index < limit) {
+        if (x + 3 == lvl.lvl_1.walls.lvl_walls_x[index] &&
+            y + 2 == lvl.lvl_1.walls.lvl_walls_y[index]
+        ) { collisions ++ }
+        index++
+    }
+    if (collisions != 0) {
+        return true
+    } else {
+        return false
+    }
+}
+function leftTakeKey(x, y) {
+    let index = 0
+    const limit = lvl.lvl_1.walls.lvl_walls_x.length
+
+    let collisions = 0
+
+    while (index < limit) {
+        if (x + 1 == lvl.lvl_1.walls.lvl_walls_x[index] &&
+            y + 2  == lvl.lvl_1.walls.lvl_walls_y[index]
+        ) { collisions ++ }
+        index++
+    }
+    if (collisions != 0) {
+        return true
+    } else {
+        return false
+    }
+}
+function topTakeKey(x, y) {
+    let index = 0
+    const limit = lvl.lvl_1.walls.lvl_walls_x.length
+
+    let collisions = 0
+
+    while (index < limit) {
+        if (x + 2 == lvl.lvl_1.walls.lvl_walls_x[index] &&
+            y + 1 == lvl.lvl_1.walls.lvl_walls_y[index]
+        ) { collisions ++}
+        index++
+    }
+    if (collisions != 0) {
+        return true
+    } else {
+        return false
+    }
+}
+function downTakeKey(x, y) {
+    let index = 0
+    const limit = lvl.lvl_1.walls.lvl_walls_x.length
+
+    let collisions = 0
+
+    while (index < limit) {
+        if (x + 2 == lvl.lvl_1.walls.lvl_walls_x[index] &&
+            y + 3 == lvl.lvl_1.walls.lvl_walls_y[index]
         ) { collisions ++ }
         index++
     }

@@ -35,37 +35,37 @@ module.exports = {
             }
         },
         'lvl_2' : {
-            map_x: 12,
-            map_y: 6,
-            player_x: 0,
+            map_x: 9,
+            map_y: 5,
+            player_x: 6,
             player_y: 2,
-            moves: 22,
+            moves: 20,
             'walls': {
-                lvl_walls_x: [2,3,5,7,8,8],
-                lvl_walls_y: [3,3,3,3,3,4]
+                lvl_walls_x: [4,6,4,6],
+                lvl_walls_y: [2,2,3,3]
             },
             'spikes': {
-                lvl_spikes_x: [4,5],
-                lvl_spikes_y: [3,4]
+                lvl_spikes_x: [3,7],
+                lvl_spikes_y: [3,3]
             },
             'keys': {
                 golden_key_x: 2,
                 golden_key_y: 2,
-                silver_key_x: 4, 
-                silver_key_y: 2,
+                silver_key_x: 2, 
+                silver_key_y: 4,
                 bronze_key_x: 7, 
-                bronze_key_y: 4,
+                bronze_key_y: 2,
             },
             'doors': {
-                golden_door_x: 7,
-                golden_door_y: 2,
-                silver_door_x: 3, 
-                silver_door_y: 2,
-                bronze_door_x: 5, 
-                bronze_door_y: 2,
+                golden_door_x: 5,
+                golden_door_y: 3,
+                silver_door_x: 2,
+                silver_door_y: 3,
+                bronze_door_x: 6,  
+                bronze_door_y: 4,
             },
             'exit': {
-                exit_x: 8, exit_y: 2
+                exit_x: 5, exit_y: 2
             }
         }
     }

@@ -5,7 +5,7 @@ module.exports = {
             map_y: 5,
             player_x: 0,
             player_y: 2,
-            moves: 18,
+            moves: 19,
             'walls': {
                 lvl_walls_x: [2,3,5,7],
                 lvl_walls_y: [3,3,3,3]
@@ -30,7 +30,9 @@ module.exports = {
                 bronze_door_x: 5, 
                 bronze_door_y: 2,
             },
-            'exit': { exit_x: 2, exit_y: 4}
+            'exit': {
+                exit_x: 8, exit_y: 2
+            }
         }
     }
 }

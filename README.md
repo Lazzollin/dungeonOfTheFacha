@@ -16,6 +16,16 @@ Simpler setup update
 * 💻 A computer with somewhat stable internet (not my case)
 * ⌚ 10 ~ 25 minutes
 
-First go to [Discord developer portal](https://discord.com/developers/applications) and create a **New Application**.
+* I - Create a discord bot
 
-Once you have your app created go to the **0Auth2** tab, on scopes select **"bot"** and on bot permissions select **"Administrator"**, you'll end up with a link like this 'https://discord.com/api/oauth2/authorize?client_id=(your_bot_ID)&permissions=8&scope=bot'.
+  First go to the [Discord developer portal](https://discord.com/developers/applications) and create a **New Application**.
+
+  Once you have your app created go to the **0Auth2** tab, on scopes select **"bot"** and on bot permissions select **"Administrator"**, you'll end up with a link like this 'https://discord.com/api/oauth2/authorize?client_id=(your_bot_ID)&permissions=8&scope=bot'.
+
+  Now you can copy that link and paste it on your browser and add your new bot to a server.
+
+* II - Server setup
+
+  Dungeon of the Facha uses custom server emojis as textures, so you'll need to add them to your server, to do that go to the **server settings**, click on **"Emoji"** and then **"Upload Emoji"** (You need at least **<h4>18</h4>** available emoji slots)
+
+

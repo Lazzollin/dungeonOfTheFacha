@@ -2,7 +2,7 @@
 
 Simpler setup update
 
-<img src="./logo.png" width="250" height="250" />
+<img class="logo" src="./logo.png" width="250" height="250" />
 
 ### The Facha is so Facha that his on a journey to find the golden Tula, because he can, hi's THE FACHA
 
@@ -20,3 +20,6 @@ First go to [Discord developer portal](https://discord.com/developers/applicatio
 
 Once you have your app created go to the **0Auth2** tab, on scopes select **"bot"** and on bot permissions select **"Administrator"**, you'll end up with a link like this 'https://discord.com/api/oauth2/authorize?client_id=(your_bot_ID)&permissions=8&scope=bot'.
 
+.logo {
+  border-radius: 50%;
+}

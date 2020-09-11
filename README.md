@@ -26,6 +26,6 @@ Simpler setup update
 
 * II - Server setup
 
-  Dungeon of the Facha uses custom server emojis as textures, so you'll need to add them to your server, to do that go to the **server settings**, click on **"Emoji"** and then **"Upload Emoji"** (You need at least **<h4>18</h4>** available emoji slots)
+  Dungeon of the Facha uses custom server emojis as textures, so you'll need to add them to your server, to do that go to the **server settings**, click on **"Emoji"** and then **"Upload Emoji"** (You need at least **_18_** available emoji slots), navigate to the game folder, then go to textures and select all the images (you can see all the initial concepts of the levels on the concepts lvl (don't add those as emojis))
 
 

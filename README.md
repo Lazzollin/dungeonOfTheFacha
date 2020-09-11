@@ -41,5 +41,3 @@ Simpler setup update
 * IV - Take it for a spin
 
   That's it, now you're ready to help The Facha on his adventure to find the Golden Tula, GLHF!
-
-

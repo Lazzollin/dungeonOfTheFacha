@@ -510,6 +510,7 @@ async function game(msg) {
                 map += ` \n`
             }
             console.log(map.length)
+
             return buildInterface(lvl_number, lives, moves) + map
         }
         

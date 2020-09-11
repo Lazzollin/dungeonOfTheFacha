@@ -2,4 +2,12 @@
 
 ![](/logo.png)
 
-<h2>The Facha is so Facha that his on a journey to find the golden Tula, because he can, hi's THE FACHA</h2>
+### The Facha is so Facha that his on a journey to find the golden Tula, because he can, hi's THE FACHA
+
+
+#### Setup guide
+
+First go to [Discord developer portal](https://discord.com/developers/applications) and create a **New Application**.
+
+Once you have your app created go to the **0Auth2** tab, on scopes select **"bot"** and on bot permissions select **"Administrator"**, you'll end up with a link like this 'https://discord.com/api/oauth2/authorize?client_id=(your_bot_ID)&permissions=8&scope=bot'.
+

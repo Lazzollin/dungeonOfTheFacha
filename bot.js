@@ -36,6 +36,7 @@ async function game(msg) {
         golden_door_facha: `<:gdf:753638706535071824>`,
         silver_door_facha: `<:sdf:753638707021611108>`,
         bronze_door_facha: `<:bdf:753638706040012850>`,
+        golden_door_on_spike: `<:gks:753764024369545277>`,
     }
 
     let lvl_number = 1
@@ -48,6 +49,9 @@ async function game(msg) {
                 break
             case 2:
                 lvl = levels.lvl_2
+                break
+            case 3:
+                lvl = levels.lvl_3
                 break
         }
     }
@@ -108,7 +112,7 @@ async function game(msg) {
             collector.on('collect', (reaction, collectorr) => {
                 console.log('got a reaction')
         
-                if (moves == 0) {collector.stop('https://www.youtube.com/watch?v=OLpeX4RRo28')}
+                if (moves <= 0) {collector.stop('https://www.youtube.com/watch?v=OLpeX4RRo28')}
                 switch (reaction.emoji.name) {
                     case '➡':
                         moves--
@@ -280,7 +284,7 @@ async function game(msg) {
                             console.log('got a reaction')
                             switch (reaction.emoji.name) {
                                 case '⏩':
-                                    if (lvl_number == 2) {
+                                    if (lvl_number == 3) {
                                         sentMessage.delete()
                                         sentMessage.channel.send(new Discord.MessageEmbed()
                                         .setColor('#ff0000')
@@ -405,6 +409,14 @@ async function game(msg) {
                         player_x + 2 == x && player_y + 2 == y)
                     {
                        map += textures.angry_facha
+                       spike_index ++
+                       // render spikes \/
+                    } else if (lvl.spikes.lvl_spikes_x[spike_index] == x &&
+                        lvl.spikes.lvl_spikes_y[spike_index] == y && lvl.keys.golden_key_x == x &&
+                        lvl.keys.golden_key_y == y && has_golden_key == false
+                        )
+                    {
+                       map += textures.golden_door_on_spike
                        spike_index ++
                        // render spikes \/
                     } else if (lvl.spikes.lvl_spikes_x[spike_index] == x &&

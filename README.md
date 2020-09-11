@@ -2,7 +2,7 @@
 
 Simpler setup update
 
-![](/logo.png)
+<img src="./logo.png" width="250" height="250" />
 
 ### The Facha is so Facha that his on a journey to find the golden Tula, because he can, hi's THE FACHA
 
@@ -13,8 +13,8 @@ Simpler setup update
 
 * [<img src="https://sdtimes.com/wp-content/uploads/2018/04/1_tfZa4vsI6UusJYt_fzvGnQ.png" width="16" height="16" />](https://nodejs.org/en/) Node JS
 * <img src="https://vignette.wikia.nocookie.net/sanicman/images/c/ca/Concours-discord-cartes-voeux-fortnite-france-6.png/revision/latest?cb=20191015023221" width="16" height="16" /> A Discord server (Or at least moderator permissions on one)
-* A computer with somewhat stable internet (not my case)
-* 10 ~ 25 minutes
+* 💻 A computer with somewhat stable internet (not my case)
+* ⌚ 10 ~ 25 minutes
 
 First go to [Discord developer portal](https://discord.com/developers/applications) and create a **New Application**.
 

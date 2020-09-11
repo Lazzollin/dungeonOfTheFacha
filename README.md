@@ -26,6 +26,20 @@ Simpler setup update
 
 * II - Server setup
 
-  Dungeon of the Facha uses custom server emojis as textures, so you'll need to add them to your server, to do that go to the **server settings**, click on **"Emoji"** and then **"Upload Emoji"** (You need at least **_18_** available emoji slots), navigate to the game folder, then go to textures and select all the images (you can see all the initial concepts of the levels on the concepts lvl (don't add those as emojis))
+  Dungeon of the Facha uses custom server emojis as textures, so you'll need to add them to your server, to do that go to the **server settings**, click on **"Emoji"** and then **"Upload Emoji"** (You need at least **_18_** available emoji slots), navigate to the game folder, then go to **textures** and select **all the images** (you can add your own textures if you want, just make a 300x300 png and replace the original with the same name).
+  
+* III - Textures setup
+
+  Now with the emoji textures added to the server there's ony one more step to do before playing.
+  
+  Discord Emojis ID are unique, even if you add the same picture as an emoji on two different servers, the emoji ID will be different, so you'll have to give the game the unique ID of the textures.
+  
+  To do that, send a message with the prefix //setup, followed by a space and then all the textures emojis.
+  
+  That's it, the game should recognize the //setup command and setup all the IDs for you.
+  
+* IV - Take it for a spin
+
+  That's it, now you're ready to help The Facha on his adventure to find the Golden Tula, GLHF!
 
 

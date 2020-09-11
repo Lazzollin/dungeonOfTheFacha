@@ -11,7 +11,7 @@ Simpler setup update
 
 #### Requirements:
 
-* Node JS <img src="https://www.pikpng.com/pngl/m/430-4309640_js-logo-nodejs-logo-clipart.png" width="100" height="100" />
+* Node JS <img src="https://sdtimes.com/wp-content/uploads/2018/04/1_tfZa4vsI6UusJYt_fzvGnQ.png" width="20" height="20" />
 * A Discord server (Or at least moderator permissions on one)
 * A computer with somewhat stable internet (not my case)
 * 10 ~ 25 minutes

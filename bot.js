@@ -59,7 +59,7 @@ function autoSetup(msg) {
         return trimedId
     }
 
-    const querys = {
+    const querys = { // <:hfjdks:43782467832>
         "query_1": {
             query: '<:fr:',
             errorMessage: 'that\'s not a wall try again',
@@ -221,7 +221,7 @@ function autoSetup(msg) {
                 
 client.login(BOT_TOKEN)
 
-async function game(msg) {
+function game(msg) {
     const jsonString = fs.readFileSync('./textureID.json')
     const textureJSON = JSON.parse(jsonString)
 
@@ -311,15 +311,15 @@ async function game(msg) {
 
             movement(reaction.emoji.name ,sentMessage)
             
-            if (lvl.exit.exit_x == player_x + 2 &&
-                lvl.exit.exit_y == player_y + 2) {
+            if (lvl.exit.exit_x === player_x + 2 &&
+                lvl.exit.exit_y === player_y + 2) {
                     win = true
                     collector.stop()
             }
         });
     
         collector.on('end', collected => {
-            if (win == true) {
+            if (win === true) {
                 sentMessage.edit(buildMap(map_x, map_y)) // buildInterface(lvl_number,lives,moves))
                 .then(sentMessage.channel.send(winMessage())
                 .then( sentMessage => {setTimeout(() => { sentMessage.delete() }, 15000)}))
@@ -334,12 +334,12 @@ async function game(msg) {
                         reaction.emoji.name === '❌'
                     );
     
-                    let collector = sentMessage.createReactionCollector(repeatFilter, { time: 25000 });
+                    let collector = sentMessage.createReactionCollector(repeatFilter, { time: 35000 });
                     collector.on('collect', (reaction, collector) => {
                         console.log('got a reaction')
                         switch (reaction.emoji.name) {
                             case '⏩':
-                                if (lvl_number == 3) {
+                                if (lvl_number === 3) {
                                     sentMessage.delete()
                                     sentMessage.channel.send(new Discord.MessageEmbed()
                                     .setColor('#ff0000')
@@ -375,7 +375,7 @@ async function game(msg) {
                         }
                     })
                 })
-            } else if (lives == 1){
+            } else if (lives === 1){
                 sentMessage.delete()
                 sentMessage.channel.send(new Discord.MessageEmbed()
                     .setColor('#ff0000')
@@ -399,7 +399,7 @@ async function game(msg) {
                         reaction.emoji.name === '❌'
                     );
     
-                    let collector = sentMessage.createReactionCollector(repeatFilter, { time: 25000 });
+                    let collector = sentMessage.createReactionCollector(repeatFilter, { time: 35000 });
                     collector.on('collect', (reaction, collector) => {
                         console.log('got a reaction')
                         switch (reaction.emoji.name) {
@@ -444,136 +444,136 @@ async function game(msg) {
         for (i=0;i<row;i++) {
             x = 1
             console.log(y)
-            if (y == 1 || y == map_y) {map += textures.frame}
+            if (y === 1 || y === map_y) {map += textures.frame}
             for (j=0;j<col;j++){
-                if (y == 1 || y == map_y) {
+                if (y === 1 || y === map_y) {
                     // render the main frame and the exit \/
-                    if (x + 1 == map_x) {
+                    if (x + 1 === map_x) {
                             map += textures.frame 
                             break
                     } else {
                         map += textures.frame
                     }
                     // render walls \/
-                } else if (lvl.walls.lvl_walls_x[wall_index] == x &&
-                    lvl.walls.lvl_walls_y[wall_index] == y)
+                } else if (lvl.walls.lvl_walls_x[wall_index] === x &&
+                    lvl.walls.lvl_walls_y[wall_index] === y)
                 {
                     map += textures.frame
                     wall_index ++
                     // render angry facha on spikes \/
-                } else if (lvl.spikes.lvl_spikes_x[spike_index] == x &&
-                    lvl.spikes.lvl_spikes_y[spike_index] == y &&
-                    player_x + 2 == x && player_y + 2 == y)
+                } else if (lvl.spikes.lvl_spikes_x[spike_index] === x &&
+                    lvl.spikes.lvl_spikes_y[spike_index] === y &&
+                    player_x + 2 === x && player_y + 2 === y)
                 {
                     map += textures.angry_facha
                     spike_index ++
                     // render golden key on spikes \/
-                } else if (lvl.spikes.lvl_spikes_x[spike_index] == x &&
-                    lvl.spikes.lvl_spikes_y[spike_index] == y && lvl.keys.golden_key_x == x &&
-                    lvl.keys.golden_key_y == y && has_golden_key == false
+                } else if (lvl.spikes.lvl_spikes_x[spike_index] === x &&
+                    lvl.spikes.lvl_spikes_y[spike_index] === y && lvl.keys.golden_key_x === x &&
+                    lvl.keys.golden_key_y === y && has_golden_key === false
                     )
                 {
                     map += textures.golden_key_on_spike
                     spike_index ++
                     // render silver key on spikes \/
-                } else if (lvl.spikes.lvl_spikes_x[spike_index] == x &&
-                    lvl.spikes.lvl_spikes_y[spike_index] == y && lvl.keys.silver_key_x == x &&
-                    lvl.keys.silver_key_y == y && has_silver_key == false
+                } else if (lvl.spikes.lvl_spikes_x[spike_index] === x &&
+                    lvl.spikes.lvl_spikes_y[spike_index] === y && lvl.keys.silver_key_x === x &&
+                    lvl.keys.silver_key_y === y && has_silver_key === false
                     )
                 {
                     map += textures.silver_key_on_spike
                     spike_index ++
                     // render bronze key on spikes \/
-                } else if (lvl.spikes.lvl_spikes_x[spike_index] == x &&
-                    lvl.spikes.lvl_spikes_y[spike_index] == y && lvl.keys.bronze_key_x == x &&
-                    lvl.keys.bronze_key_y == y && has_bronze_key == false
+                } else if (lvl.spikes.lvl_spikes_x[spike_index] === x &&
+                    lvl.spikes.lvl_spikes_y[spike_index] === y && lvl.keys.bronze_key_x === x &&
+                    lvl.keys.bronze_key_y === y && has_bronze_key === false
                     )
                 {
                     map += textures.golden_key_on_spike
                     spike_index ++
                     // render spikes \/
-                } else if (lvl.spikes.lvl_spikes_x[spike_index] == x &&
-                    lvl.spikes.lvl_spikes_y[spike_index] == y)
+                } else if (lvl.spikes.lvl_spikes_x[spike_index] === x &&
+                    lvl.spikes.lvl_spikes_y[spike_index] === y)
                 {
                     map += textures.spike
                     spike_index ++
                     // render player on opened golden door \/
-                } else if (lvl.doors.golden_door_x == x &&
-                    lvl.doors.golden_door_y == y &&
-                    player_x + 2 == x && player_y + 2 == y)
+                } else if (lvl.doors.golden_door_x === x &&
+                    lvl.doors.golden_door_y === y &&
+                    player_x + 2 === x && player_y + 2 === y)
                 {
                     map += textures.golden_door_facha
                     // render player on opened silver door \/
-                } else if (lvl.doors.silver_door_x == x &&
-                    lvl.doors.silver_door_y == y &&
-                    player_x + 2 == x && player_y + 2 == y)
+                } else if (lvl.doors.silver_door_x === x &&
+                    lvl.doors.silver_door_y === y &&
+                    player_x + 2 === x && player_y + 2 === y)
                 {
                     map += textures.silver_door_facha
                     // render player on opened bronze door \/
-                } else if (lvl.doors.bronze_door_x == x &&
-                    lvl.doors.bronze_door_y == y &&
-                    player_x + 2 == x && player_y + 2 == y)
+                } else if (lvl.doors.bronze_door_x === x &&
+                    lvl.doors.bronze_door_y === y &&
+                    player_x + 2 === x && player_y + 2 === y)
                 {
                     map += textures.bronze_door_facha
                     // render golden door opened \/
-                } else if (lvl.doors.golden_door_x == x &&
-                    lvl.doors.golden_door_y == y &&
-                    golden_door_opened == true)
+                } else if (lvl.doors.golden_door_x === x &&
+                    lvl.doors.golden_door_y === y &&
+                    golden_door_opened === true)
                 {
                     map += textures.golden_door_open
                     // render silver door opened\/
-                } else if (lvl.doors.silver_door_x == x &&
-                    lvl.doors.silver_door_y == y &&
-                    silver_door_opened == true)
+                } else if (lvl.doors.silver_door_x === x &&
+                    lvl.doors.silver_door_y === y &&
+                    silver_door_opened === true)
                 {
                     map += textures.silver_door_open
                     // render bronze door opened \/
-                } else if (lvl.doors.bronze_door_x == x &&
-                    lvl.doors.bronze_door_y == y &&
-                    bronze_door_opened == true)
+                } else if (lvl.doors.bronze_door_x === x &&
+                    lvl.doors.bronze_door_y === y &&
+                    bronze_door_opened === true)
                 {
                     map += textures.bronze_door_open
                     // render golden door \/
-                } else if (lvl.doors.golden_door_x == x &&
-                    lvl.doors.golden_door_y == y)
+                } else if (lvl.doors.golden_door_x === x &&
+                    lvl.doors.golden_door_y === y)
                 {
                     map += textures.golden_door
                     // render silver door \/
-                } else if (lvl.doors.silver_door_x == x &&
-                    lvl.doors.silver_door_y == y)
+                } else if (lvl.doors.silver_door_x === x &&
+                    lvl.doors.silver_door_y === y)
                 {
                     map += textures.silver_door
                     // render bronze door \/
-                } else if (lvl.doors.bronze_door_x == x &&
-                    lvl.doors.bronze_door_y == y)
+                } else if (lvl.doors.bronze_door_x === x &&
+                    lvl.doors.bronze_door_y === y)
                 {
                     map += textures.bronze_door
                     // render golden key \/
-                } else if (lvl.keys.golden_key_x == x &&
-                    lvl.keys.golden_key_y == y && has_golden_key == false)
+                } else if (lvl.keys.golden_key_x === x &&
+                    lvl.keys.golden_key_y === y && has_golden_key === false)
                 {
                     map += textures.golden_key
                     // render silver key \/
-                } else if (lvl.keys.silver_key_x == x &&
-                    lvl.keys.silver_key_y == y && has_silver_key == false)
+                } else if (lvl.keys.silver_key_x === x &&
+                    lvl.keys.silver_key_y === y && has_silver_key === false)
                 {
                     map += textures.silver_key
                     // render bronze key \/
-                } else if (lvl.keys.bronze_key_x == x &&
-                    lvl.keys.bronze_key_y == y && has_bronze_key == false)
+                } else if (lvl.keys.bronze_key_x === x &&
+                    lvl.keys.bronze_key_y === y && has_bronze_key === false)
                 {
                     map += textures.bronze_key
                     // render facha \/
-                } else if (lvl.exit.exit_x == x &&
-                    lvl.exit.exit_y == y &&
-                    player_x + 2 == x && player_y + 2 == y) {
+                } else if (lvl.exit.exit_x === x &&
+                    lvl.exit.exit_y === y &&
+                    player_x + 2 === x && player_y + 2 === y) {
                     map += textures.happy_facha
-                } else if (lvl.exit.exit_x == x &&
-                    lvl.exit.exit_y == y) {
+                } else if (lvl.exit.exit_x === x &&
+                    lvl.exit.exit_y === y) {
                     map += textures.exit
-                } else if (player_x + 2 == x && player_y + 2 == y) {
+                } else if (player_x + 2 === x && player_y + 2 === y) {
                     map += facha
-                } else if (x == 1 || x == map_x) {
+                } else if (x === 1 || x === map_x) {
                     // render the rest of the frame
                     map += textures.frame
                 } else { map += textures.inside }
@@ -594,19 +594,19 @@ async function game(msg) {
         let collisions = 0
     
         while (index < limit) {
-            if (x + 3 == lvl.walls.lvl_walls_x[index] &&
-                y + 2 == lvl.walls.lvl_walls_y[index] ||
-                (x + 3 == lvl.doors.golden_door_x &&
-                y + 2 == lvl.doors.golden_door_y &&
-                has_golden_key == false
+            if (x + 3 === lvl.walls.lvl_walls_x[index] &&
+                y + 2 === lvl.walls.lvl_walls_y[index] ||
+                (x + 3 === lvl.doors.golden_door_x &&
+                y + 2 === lvl.doors.golden_door_y &&
+                has_golden_key === false
                 ) || 
-                (x + 3 == lvl.doors.silver_door_x &&
-                y + 2 == lvl.doors.silver_door_y &&
-                has_silver_key == false
+                (x + 3 === lvl.doors.silver_door_x &&
+                y + 2 === lvl.doors.silver_door_y &&
+                has_silver_key === false
                 ) || 
-                (x + 3 == lvl.doors.bronze_door_x &&
-                y + 2 == lvl.doors.bronze_door_y &&
-                has_bronze_key == false
+                (x + 3 === lvl.doors.bronze_door_x &&
+                y + 2 === lvl.doors.bronze_door_y &&
+                has_bronze_key === false
                 )
             ) { collisions ++ }
             index++
@@ -625,19 +625,19 @@ async function game(msg) {
         let collisions = 0
     
         while (index < limit) {
-            if (x + 1 == lvl.walls.lvl_walls_x[index] &&
-                y + 2  == lvl.walls.lvl_walls_y[index] ||
-                (x + 1 == lvl.doors.golden_door_x &&
-                y + 2 == lvl.doors.golden_door_y &&
-                has_golden_key == false
+            if (x + 1 === lvl.walls.lvl_walls_x[index] &&
+                y + 2  === lvl.walls.lvl_walls_y[index] ||
+                (x + 1 === lvl.doors.golden_door_x &&
+                y + 2 === lvl.doors.golden_door_y &&
+                has_golden_key === false
                 ) || 
-                (x + 1 == lvl.doors.silver_door_x &&
-                y + 2 == lvl.doors.silver_door_y &&
-                has_silver_key == false
+                (x + 1 === lvl.doors.silver_door_x &&
+                y + 2 === lvl.doors.silver_door_y &&
+                has_silver_key === false
                 ) || 
-                (x + 1 == lvl.doors.bronze_door_x &&
-                y + 2 == lvl.doors.bronze_door_y &&
-                has_bronze_key == false
+                (x + 1 === lvl.doors.bronze_door_x &&
+                y + 2 === lvl.doors.bronze_door_y &&
+                has_bronze_key === false
                 )
             ) { collisions ++ }
             index++
@@ -656,19 +656,19 @@ async function game(msg) {
         let collisions = 0
     
         while (index < limit) {
-            if (x + 2 == lvl.walls.lvl_walls_x[index] &&
-                y + 1 == lvl.walls.lvl_walls_y[index] ||
-                (x + 2 == lvl.doors.golden_door_x &&
-                y + 1 == lvl.doors.golden_door_y &&
-                has_golden_key == false
+            if (x + 2 === lvl.walls.lvl_walls_x[index] &&
+                y + 1 === lvl.walls.lvl_walls_y[index] ||
+                (x + 2 === lvl.doors.golden_door_x &&
+                y + 1 === lvl.doors.golden_door_y &&
+                has_golden_key === false
                 ) || 
-                (x + 2 == lvl.doors.silver_door_x &&
-                y + 1 == lvl.doors.silver_door_y &&
-                has_silver_key == false
+                (x + 2 === lvl.doors.silver_door_x &&
+                y + 1 === lvl.doors.silver_door_y &&
+                has_silver_key === false
                 ) || 
-                (x + 2 == lvl.doors.bronze_door_x &&
-                y + 1 == lvl.doors.bronze_door_y &&
-                has_bronze_key == false
+                (x + 2 === lvl.doors.bronze_door_x &&
+                y + 1 === lvl.doors.bronze_door_y &&
+                has_bronze_key === false
                 )
             ) { collisions ++}
             index++
@@ -687,19 +687,19 @@ async function game(msg) {
         let collisions = 0
     
         while (index < limit) {
-            if (x + 2 == lvl.walls.lvl_walls_x[index] &&
-                y + 3 == lvl.walls.lvl_walls_y[index] ||
-                (x + 2 == lvl.doors.golden_door_x &&
-                y + 3 == lvl.doors.golden_door_y &&
-                has_golden_key == false
+            if (x + 2 === lvl.walls.lvl_walls_x[index] &&
+                y + 3 === lvl.walls.lvl_walls_y[index] ||
+                (x + 2 === lvl.doors.golden_door_x &&
+                y + 3 === lvl.doors.golden_door_y &&
+                has_golden_key === false
                 ) || 
-                (x + 2 == lvl.doors.silver_door_x &&
-                y + 3 == lvl.doors.silver_door_y &&
-                has_silver_key == false
+                (x + 2 === lvl.doors.silver_door_x &&
+                y + 3 === lvl.doors.silver_door_y &&
+                has_silver_key === false
                 ) || 
-                (x + 2 == lvl.doors.bronze_door_x &&
-                y + 3 == lvl.doors.bronze_door_y &&
-                has_bronze_key == false
+                (x + 2 === lvl.doors.bronze_door_x &&
+                y + 3 === lvl.doors.bronze_door_y &&
+                has_bronze_key === false
                 )
             ) { collisions ++ }
             index++
@@ -715,7 +715,7 @@ async function game(msg) {
         let s = ''
         let index = 0
     
-        if (lives == 0) {
+        if (lives === 0) {
             moves = 'X'
         }
         while (index < lives) {
@@ -785,8 +785,8 @@ async function game(msg) {
         }
     
         while (index < limit) {
-            if (s_x == lvl.spikes.lvl_spikes_x[index] &&
-                s_y == lvl.spikes.lvl_spikes_y[index]
+            if (s_x === lvl.spikes.lvl_spikes_x[index] &&
+                s_y === lvl.spikes.lvl_spikes_y[index]
             ) { collisions ++ }
             index++
         }
@@ -798,31 +798,31 @@ async function game(msg) {
     }
     
     function takeKey(x, y) {
-        if (x + 2 == lvl.keys.golden_key_x &&
-            y + 2 == lvl.keys.golden_key_y) {
+        if (x + 2 === lvl.keys.golden_key_x &&
+            y + 2 === lvl.keys.golden_key_y) {
                 return 'gold'
         }
-        if (x + 2 == lvl.keys.silver_key_x &&
-            y + 2 == lvl.keys.silver_key_y) {
+        if (x + 2 === lvl.keys.silver_key_x &&
+            y + 2 === lvl.keys.silver_key_y) {
                 return 'silver'
         }
-        if (x + 2 == lvl.keys.bronze_key_x &&
-            y + 2 == lvl.keys.bronze_key_y) {
+        if (x + 2 === lvl.keys.bronze_key_x &&
+            y + 2 === lvl.keys.bronze_key_y) {
                 return 'bronze'
         }
     }
     
     function openDoor(x, y) {
-        if (x + 2 == lvl.doors.golden_door_x &&
-            y + 2 == lvl.doors.golden_door_y) {
+        if (x + 2 === lvl.doors.golden_door_x &&
+            y + 2 === lvl.doors.golden_door_y) {
                 return 'gold'
         }
-        if (x + 2 == lvl.doors.silver_door_x &&
-            y + 2 == lvl.doors.silver_door_y) {
+        if (x + 2 === lvl.doors.silver_door_x &&
+            y + 2 === lvl.doors.silver_door_y) {
                 return 'silver'
         }
-        if (x + 2 == lvl.doors.bronze_door_x &&
-            y + 2 == lvl.doors.bronze_door_y) {
+        if (x + 2 === lvl.doors.bronze_door_x &&
+            y + 2 === lvl.doors.bronze_door_y) {
                 return 'bronze'
         }
     }
@@ -830,28 +830,28 @@ async function game(msg) {
         console.log(direction)
         const position = {
             "➡": {
-                map_fixed_position: player_x + 3 == map_x,
+                map_fixed_position: player_x + 3 === map_x,
                 collision: rightCollision(player_x, player_y),
                 currentDirection: 'right',
                 increase: player_x + 1,
                 orientation: 'x'
             },
             "⬅": {
-                map_fixed_position: player_x == 0,
+                map_fixed_position: player_x === 0,
                 collision: leftCollision(player_x, player_y),
                 currentDirection: 'left',
                 increase: player_x - 1,
                 orientation: 'x'
             },
             "⬆": {
-                map_fixed_position: player_y == 0,
+                map_fixed_position: player_y === 0,
                 collision: topCollision(player_x, player_y),
                 currentDirection: 'up',
                 increase: player_y - 1,
                 orientation: 'y'
             },
             "⬇": {
-                map_fixed_position: player_y + 3 == map_y,
+                map_fixed_position: player_y + 3 === map_y,
                 collision: bottomCollision(player_x, player_y),
                 currentDirection: 'down',
                 increase: player_y + 1,
@@ -867,33 +867,27 @@ async function game(msg) {
             console.log(`can\'t go ${currentPosition.currentDirection}`)
         } else {
             console.log(`go ${currentPosition.currentDirection}`)
-            if (isInSpike(player_x, player_y, currentPosition.currentDirection) == true) {
+            if (isInSpike(player_x, player_y, currentPosition.currentDirection) === true) {
                 console.log('is in spike')
                 moves--
             }
-            if (currentPosition.orientation == 'x') {
+            if (currentPosition.orientation === 'x') {
                 player_x = currentPosition.increase
             } else {
                 player_y = currentPosition.increase
             }
-            if (takeKey(player_x, player_y) == 'gold') {
-                has_golden_key = true
-            }
-            if (takeKey(player_x, player_y) == 'silver') {
-                has_silver_key = true
-            }
-            if (takeKey(player_x, player_y) == 'bronze') {
-                has_bronze_key = true
-            }
-            if (openDoor(player_x, player_y) == 'gold') {
-                golden_door_opened = true
-            }
-            if (openDoor(player_x, player_y) == 'silver') {
-                silver_door_opened = true
-            }
-            if (openDoor(player_x, player_y) == 'bronze') {
-                bronze_door_opened = true
-            }
+            if (takeKey(player_x, player_y) === 'gold') has_golden_key = true
+                
+            if (takeKey(player_x, player_y) === 'silver') has_silver_key = true
+                
+            if (takeKey(player_x, player_y) === 'bronze') has_bronze_key = true
+
+            if (openDoor(player_x, player_y) === 'gold') golden_door_opened = true
+                
+            if (openDoor(player_x, player_y) === 'silver') silver_door_opened = true
+
+            if (openDoor(player_x, player_y) === 'bronze') bronze_door_opened = true
+            
             sentMessage.edit(buildMap(map_x, map_y))
         }
     }

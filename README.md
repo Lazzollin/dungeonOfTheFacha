@@ -11,10 +11,10 @@ Simpler setup update
 
 #### Requirements:
 
-* [<img src="https://sdtimes.com/wp-content/uploads/2018/04/1_tfZa4vsI6UusJYt_fzvGnQ.png" width="16" height="16" />](https://nodejs.org/en/) Node JS
-* <img src="https://vignette.wikia.nocookie.net/sanicman/images/c/ca/Concours-discord-cartes-voeux-fortnite-france-6.png/revision/latest?cb=20191015023221" width="16" height="16" /> A Discord server (Or at least moderator permissions on one)
-* 💻 A computer with somewhat stable internet (not my case)
-* ⌚ 10 ~ 25 minutes
+  * [<img src="https://sdtimes.com/wp-content/uploads/2018/04/1_tfZa4vsI6UusJYt_fzvGnQ.png" width="16" height="16" />](https://nodejs.org/en/) Node JS
+  * <img src="https://vignette.wikia.nocookie.net/sanicman/images/c/ca/Concours-discord-cartes-voeux-fortnite-france-6.png/revision/latest?cb=20191015023221" width="16" height="16" /> A Discord server (Or at least moderator permissions on one)
+  * 💻 A computer with somewhat stable internet (not my case)
+  * ⌚ 10 ~ 25 minutes
 
 * I - Create a discord bot
 

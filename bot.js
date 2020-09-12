@@ -188,11 +188,12 @@ function autoSetup(msg) {
         const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
         replyCollector.on('collect', msg => {
             if (msg.content.startsWith(querys["query_" + queryIndex].query)) {
-                console.log(trimIDMsg(msg.content))
                 if (queryIndex <= 11) {
                     textures_ids.ids[querys["query_" + queryIndex].texture] = trimIDMsg(msg.content)
+                    console.log(trimIDMsg(msg.content))
                 } else {
                     textures_ids.ids[querys["query_" + queryIndex].texture] = trimIDMsg2(msg.content)
+                    console.log(trimIDMsg2(msg.content))
                 }
                 msg.delete()
                 sentMessage.edit(querys["query_" + queryIndex].nextItemMessage)
@@ -308,7 +309,7 @@ async function game(msg) {
 
             if (moves <= 0) {collector.stop('https://www.youtube.com/watch?v=OLpeX4RRo28')}
 
-            movement(reaction.emoji.name)
+            movement(reaction.emoji.name ,sentMessage)
             
             if (lvl.exit.exit_x == player_x + 2 &&
                 lvl.exit.exit_y == player_y + 2) {
@@ -352,6 +353,8 @@ async function game(msg) {
                                 }
                                 sentMessage.delete()
                                 win = false
+                                map_x = lvl.map_x
+                                map_y = lvl.map_y
                                 player_x = lvl.player_x
                                 player_y = lvl.player_y
                                 moves = lvl.moves
@@ -823,31 +826,36 @@ async function game(msg) {
                 return 'bronze'
         }
     }
-    function movement(direction) {
+    function movement(direction, sentMessage) {
+        console.log(direction)
         const position = {
-            ":arrow_right": {
+            "➡": {
                 map_fixed_position: player_x + 3 == map_x,
                 collision: rightCollision(player_x, player_y),
                 currentDirection: 'right',
-                increase: player_x++
+                increase: player_x + 1,
+                orientation: 'x'
             },
-            ":arrow_left": {
+            "⬅": {
                 map_fixed_position: player_x == 0,
                 collision: leftCollision(player_x, player_y),
                 currentDirection: 'left',
-                increase: player_x--
+                increase: player_x - 1,
+                orientation: 'x'
             },
-            ":arrow_up": {
+            "⬆": {
                 map_fixed_position: player_y == 0,
                 collision: topCollision(player_x, player_y),
                 currentDirection: 'up',
-                increase: player_y--
+                increase: player_y - 1,
+                orientation: 'y'
             },
-            ":arrow_down": {
+            "⬇": {
                 map_fixed_position: player_y + 3 == map_y,
                 collision: bottomCollision(player_x, player_y),
                 currentDirection: 'down',
-                increase: player_y++
+                increase: player_y + 1,
+                orientation: 'y'
             }
         }
     
@@ -857,14 +865,17 @@ async function game(msg) {
         sentMessage.reactions.resolve(direction).users.remove(currentUser[0])
         if (currentPosition.map_fixed_position  || currentPosition.collision) {
             console.log(`can\'t go ${currentPosition.currentDirection}`)
-            break;
         } else {
             console.log(`go ${currentPosition.currentDirection}`)
             if (isInSpike(player_x, player_y, currentPosition.currentDirection) == true) {
                 console.log('is in spike')
                 moves--
             }
-            currentPosition.increase
+            if (currentPosition.orientation == 'x') {
+                player_x = currentPosition.increase
+            } else {
+                player_y = currentPosition.increase
+            }
             if (takeKey(player_x, player_y) == 'gold') {
                 has_golden_key = true
             }
@@ -884,7 +895,6 @@ async function game(msg) {
                 bronze_door_opened = true
             }
             sentMessage.edit(buildMap(map_x, map_y))
-            break;
         }
     }
-}
+} // https://www.youtube.com/watch?v=X33nc9XXNYs

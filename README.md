@@ -66,11 +66,11 @@ Simpler setup update
 
   * V - Running the bot
 
-    Great!, now you can run your bot with Node.js going to you console, and on the game folder you cloned using:
+    Great!, now you can run your bot with Node.js going to your console, and on the game folder you cloned using:
 
        > npm start
 
-    Once you have the bot running, you can go to the next step   
+    Once you have the bot running, you can go to the next step
 
 
 #### Setting up Discord

@@ -26,7 +26,7 @@ Simpler setup update
 
       Example:
 
-      > cd C:\Users\MyUsername\Documents\dungeonOfTheFacha
+      > cd C:\Users\MyUsername\Documents\
 
       For more info on how to use cmd see [A Beginner's Guide To The Windows Command Line](https://www.makeuseof.com/tag/a-beginners-guide-to-the-windows-command-line/)
 
@@ -35,7 +35,7 @@ Simpler setup update
       Once you have [Node.js](https://nodejs.org/en/) installed, on cmd, go to the folder you created for the game and clone the repository like this:
 
         ```
-          git clone https://github.com/Lazzollin/dungeonOfTheFacha/tree/master
+          git clone https://github.com/Lazzollin/dungeonOfTheFacha
 
           cd dungeonOfTheFacha
 

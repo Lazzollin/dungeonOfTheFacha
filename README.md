@@ -16,7 +16,7 @@ Simpler setup update
   * 💻 A computer with somewhat stable internet (not my case)
   * ⌚ 10 ~ 25 minutes
 
-* I - Create a discord bot
+- I - Create a discord bot
 
   First go to the [Discord developer portal](https://discord.com/developers/applications) and create a **New Application**.
 

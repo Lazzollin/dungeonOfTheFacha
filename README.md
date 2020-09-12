@@ -4,7 +4,7 @@ Simpler setup update
 
 <img class="logo" src="./logo.png" width="250" height="250" style="border-radius:25%"/>
 
-### The Facha is so Facha that his on a journey to find the golden Tula, because he can, hi's THE FACHA
+### The Facha is so Facha that his on a journey to find the golden Tula, because he can, he's THE FACHA
 
 
 ### Setup guide 😎

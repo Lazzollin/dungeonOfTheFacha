@@ -11,12 +11,12 @@ Simpler setup update
 
 #### Requirements:
 
-* [<img src="https://sdtimes.com/wp-content/uploads/2018/04/1_tfZa4vsI6UusJYt_fzvGnQ.png" width="16" height="16" />](https://nodejs.org/en/) Node JS
-* <img src="https://vignette.wikia.nocookie.net/sanicman/images/c/ca/Concours-discord-cartes-voeux-fortnite-france-6.png/revision/latest?cb=20191015023221" width="16" height="16" /> A Discord server (Or at least moderator permissions on one)
-* 💻 A computer with somewhat stable internet (not my case)
-* ⌚ 10 ~ 25 minutes
+  * [<img src="https://sdtimes.com/wp-content/uploads/2018/04/1_tfZa4vsI6UusJYt_fzvGnQ.png" width="16" height="16" />](https://nodejs.org/en/) Node JS
+  * <img src="https://vignette.wikia.nocookie.net/sanicman/images/c/ca/Concours-discord-cartes-voeux-fortnite-france-6.png/revision/latest?cb=20191015023221" width="16" height="16" /> A Discord server (Or at least moderator permissions on one)
+  * 💻 A computer with somewhat stable internet (not my case)
+  * ⌚ 10 ~ 25 minutes
 
-* I - Create a discord bot
+ I - Create a discord bot
 
   First go to the [Discord developer portal](https://discord.com/developers/applications) and create a **New Application**.
 
@@ -24,11 +24,11 @@ Simpler setup update
 
   Now you can copy that link and paste it on your browser and add your new bot to a server.
 
-* II - Server setup
+ II - Server setup
 
   Dungeon of the Facha uses custom server emojis as textures, so you'll need to add them to your server, to do that go to the **server settings**, click on **"Emoji"** and then **"Upload Emoji"** (You need at least **_20_** available emoji slots), navigate to the game folder, then go to **textures** and select **all the images** (you can add your own textures if you want, just make a 300x300 png and replace the original with the same name).
   
-* III - Textures setup
+ III - Textures setup
 
   Now with the emoji textures added to the server there's ony one more step to do before playing.
   
@@ -38,7 +38,7 @@ Simpler setup update
   
   That's it, the game should recognize the //setup command and setup all the IDs for you.
   
-* IV - Take it for a spin
+ IV - Take it for a spin
 
   That's it, now you're ready to help The Facha on his adventure to find the Golden Tula, GLHF!# Dungeon of the Facha 0.2
 

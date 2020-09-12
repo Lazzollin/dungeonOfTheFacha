@@ -30,7 +30,7 @@ Simpler setup update
 
       For more info on how to use cmd see [A Beginner's Guide To The Windows Command Line](https://www.makeuseof.com/tag/a-beginners-guide-to-the-windows-command-line/)
 
-      Then, if you don't have [Node.js](https://nodejs.org/en/) installed, you should it's in the requirements
+      Then, if you don't have [Node.js](https://nodejs.org/en/) installed, you should, it's in the requirements
 
       Once you have [Node.js](https://nodejs.org/en/) installed, on cmd, go to the folder you created for the game and clone the repository like this:
 
@@ -66,7 +66,7 @@ Simpler setup update
 
   * V - Running the bot
 
-    Great!, now you can run your bot with Node.js going to your console, and on the game folder you cloned using:
+    Great!, now you can run your bot with Node.js going to your console, and on the game folder you cloned use:
 
        > npm start
 

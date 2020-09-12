@@ -53,321 +53,171 @@ function autoSetup(msg) {
     function trimIDMsg(msg) {
         let trimedId = msg.slice(5, 23)
         return trimedId
-    }function trimIDMsg2(msg) {
+    }
+    function trimIDMsg2(msg) {
         let trimedId = msg.slice(6, 24)
         return trimedId
     }
 
-    msg.channel.send('(:fr:) Ok lets start the setup first send the wall texture').then( sentMessage => {
-        const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
+    const querys = {
+        "query_1": {
+            query: '<:fr:',
+            errorMessage: 'that\'s not a wall try again',
+            nextItemMessage: '(:sp:) Now the spike texture',
+            texture: "frame_id"
+        },
+        "query_2": {
+            query: '<:sp:',
+            errorMessage: 'that\'s not a spike try again',
+            nextItemMessage: '(:ex:) Ok now lets go with the exit sign, that\'s kinda important',
+            texture: "spike_id"
+        },
+        "query_3": {
+            query: '<:ex:',
+            errorMessage: 'that\'s not an exit sign try again',
+            nextItemMessage: '(:hf:) Awesome, now give me the Happy Facha (the one with the hat)',
+            texture: "exit_id"
+        },
+        "query_4": {
+            query: '<:hf:',
+            errorMessage: 'that\'s not Happy Facha try again',
+            nextItemMessage: '(:af:) And now the angry one',
+            texture: "happy_facha_id"
+        },
+        "query_5": {
+            query: '<:af:',
+            errorMessage: 'that\'s not Angry Facha try again',
+            nextItemMessage: '(:gk:) Let\'s go with the keys now, first the golden one',
+            texture: "angry_facha_id"
+        },
+        "query_6": {
+            query: '<:gk:',
+            errorMessage: 'that\'s not a golden key try again',
+            nextItemMessage: '(:sk:) Now the silver one',
+            texture: "golden_key_id"
+        },
+        "query_7": {
+            query: '<:sk:',
+            errorMessage: 'that\'s not a silver key try again',
+            nextItemMessage: '(:bk:) Now bronze',
+            texture: "silver_key_id"
+        },
+        "query_8": {
+            query: '<:bk:',
+            errorMessage: 'that\'s not a bronze key try again',
+            nextItemMessage: '(:gd:) Good, now the doors, starting with the golden one',
+            texture: "bronze_key_id"
+        },
+        "query_9": {
+            query: '<:gd:',
+            errorMessage: 'that\'s not a golden door try again',
+            nextItemMessage: '(:sd:) And then the silver one',
+            texture: "golden_door_id"
+        },
+        "query_10": {
+            query: '<:sd:',
+            errorMessage: '(:bd:) And the bronze one',
+            nextItemMessage: 'that\'s not a silver door try again',
+            texture: "silver_door_id"
+        },
+        "query_11": {
+            query: '<:bd:',
+            errorMessage: 'that\'s not a bronze door try again',
+            nextItemMessage: '(:gdo:) You nailed it, now lets go with the opened doors, of course starting with the golden one',
+            texture: "bronze_door_id"
+        },
+        "query_12": {
+            query: '<:gdo:',
+            errorMessage: 'that\'s not an opened golden door try again',
+            nextItemMessage: '(:sdo:) And now the silver one',
+            texture: "golden_door_open_id"
+        },
+        "query_13": {
+            query: '<:sdo:',
+            errorMessage: 'that\'s not an opened silver door try again',
+            nextItemMessage: '(:bdo:) You guessed it, the bronze one',
+            texture: "silver_door_open_id"
+        },
+        "query_14": {
+            query: '<:bdo:',
+            errorMessage: 'that\'s not an opened bronze door try again',
+            nextItemMessage: '(:gdf:) Almost done, now we need the opened doors combined with the facha, starting with the golden one',
+            texture: "bronze_door_open_id"
+        },
+        "query_15": {
+            query: '<:gdf:',
+            errorMessage: 'that\'s not an opened golden door with The Facha try again',
+            nextItemMessage: '(:sdf:) Then the silver one',
+            texture: "golden_door_facha_id"
+        },
+        "query_16": {
+            query: '<:sdf:',
+            errorMessage: 'that\'s not an opened silver door with The Facha try again',
+            nextItemMessage: '(:bdf:) By now you should know how it goes (the bronze one\'s next)',
+            texture: "silver_door_facha_id"
+        },
+        "query_17": {
+            query: '<:bdf:',
+            errorMessage: 'that\'s not an opened bronze door with The Facha try again',
+            nextItemMessage: '(:gks:) Nice, only 3 more to go, now lets go with the keys on top of spikes, starting with, you guessed it, the golden one',
+            texture: "bronze_door_facha_id"
+        },
+        "query_18": {
+            query: '<:gks:',
+            errorMessage: 'that\'s not a golden key on spikes try again',
+            nextItemMessage: '(:sks:) And then the silver one (kinda repetitive I know but necessary)',
+            texture: "golden_key_on_spike_id"
+        },
+        "query_19": {
+            query: '<:sks:',
+            errorMessage: 'that\'s not a silver key on spikes try again',
+            nextItemMessage: '(:bks:) Ok this one\'s the last one, the bronze key on spikes',
+            texture: "silver_key_on_spike_id"
+        },
+        "query_20": {
+            query: '<:bks:',
+            errorMessage: 'that\'s not a bronze key on spikes try again',
+            nextItemMessage: 'That\'s it you\'re all set now, Take it for a spin using //play and GLHF!',
+            texture: "bronze_key_on_spike_id"
+        },
+    }
 
+    let queryIndex = 1
+
+    function collectTextures(sentMessage) {
+        const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
         replyCollector.on('collect', msg => {
-            if (msg.content.startsWith('<:fr:')) {
+            if (msg.content.startsWith(querys["query_" + queryIndex].query)) {
                 console.log(trimIDMsg(msg.content))
-                textures_ids.ids.frame_id = trimIDMsg(msg.content)
+                if (queryIndex <= 11) {
+                    textures_ids.ids[querys["query_" + queryIndex].texture] = trimIDMsg(msg.content)
+                } else {
+                    textures_ids.ids[querys["query_" + queryIndex].texture] = trimIDMsg2(msg.content)
+                }
                 msg.delete()
-                sentMessage.edit('(:sp:) Now the spike texture')
+                sentMessage.edit(querys["query_" + queryIndex].nextItemMessage)
                 replyCollector.stop()
             } else {
-                sentMessage.edit('that\'s not a wall try again')
+                sentMessage.edit(querys["query_" + queryIndex].errorMessage)
                 msg.delete()
             }
         })
-        replyCollector.on('end', collected => {
-            const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-            replyCollector.on('collect', msg => {
-                if (msg.content.startsWith('<:sp:')) {
-                    console.log(trimIDMsg(msg.content))
-                    textures_ids.ids.spike_id = trimIDMsg(msg.content)
-                    msg.delete()
-                    sentMessage.edit('(:ex:) Ok now lets go with the exit sign, that\'s kinda important')
-                    replyCollector.stop()
-                } else {
-                    sentMessage.edit('that\'s not a spike try again')
-                    msg.delete()
-                }
-            })
-            replyCollector.on('end', collected => {
-                const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                replyCollector.on('collect', msg => {
-                    if (msg.content.startsWith('<:ex:')) {
-                        console.log(trimIDMsg(msg.content))
-                        textures_ids.ids.exit_id = trimIDMsg(msg.content)
-                        msg.delete()
-                        sentMessage.edit('(:hf:) Awesome, now give me the Happy Facha (the one with the hat)')
-                        replyCollector.stop()
-                    } else {
-                        sentMessage.edit('that\'s not an exit sign try again')
-                        msg.delete()
-                    }
-                })
-                replyCollector.on('end', collected => {
-                    const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                    replyCollector.on('collect', msg => {
-                        if (msg.content.startsWith('<:hf:')) {
-                            console.log(trimIDMsg(msg.content))
-                            textures_ids.ids.happy_facha_id = trimIDMsg(msg.content)
-                            msg.delete()
-                            sentMessage.edit('(:af:) And now the angry one')
-                            replyCollector.stop()
-                        } else {
-                            sentMessage.edit('that\'s not Happy Facha try again')
-                            msg.delete()
-                        }
-                    })
-                    replyCollector.on('end', collected => {
-                        const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                        replyCollector.on('collect', msg => {
-                            if (msg.content.startsWith('<:af:')) {
-                                console.log(trimIDMsg(msg.content))
-                                textures_ids.ids.angry_facha_id = trimIDMsg(msg.content)
-                                msg.delete()
-                                sentMessage.edit('(:gk:) Let\'s go with the keys now, first the golden one')
-                                replyCollector.stop()
-                            } else {
-                                sentMessage.edit('that\'s not Angry Facha try again')
-                                msg.delete()
-                            }
-                        })
-                        replyCollector.on('end', collected => {
-                            const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                            replyCollector.on('collect', msg => {
-                                if (msg.content.startsWith('<:gk:')) {
-                                    console.log(trimIDMsg(msg.content))
-                                    textures_ids.ids.golden_key_id = trimIDMsg(msg.content)
-                                    msg.delete()
-                                    sentMessage.edit('(:sk:) Now the silver one')
-                                    replyCollector.stop()
-                                } else {
-                                    sentMessage.edit('that\'s not a golden key try again')
-                                    msg.delete()
-                                }
-                            })
-                            replyCollector.on('end', collected => {
-                                const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                                replyCollector.on('collect', msg => {
-                                    if (msg.content.startsWith('<:sk:')) {
-                                        console.log(trimIDMsg(msg.content))
-                                        textures_ids.ids.silver_key_id = trimIDMsg(msg.content)
-                                        msg.delete()
-                                        sentMessage.edit('(:bk:) Now bronze')
-                                        replyCollector.stop()
-                                    } else {
-                                        sentMessage.edit('that\'s not a silver key try again')
-                                        msg.delete()
-                                    }
-                                })
-                                replyCollector.on('end', collected => {
-                                    const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                                    replyCollector.on('collect', msg => {
-                                        if (msg.content.startsWith('<:bk:')) {
-                                            console.log(trimIDMsg(msg.content))
-                                            textures_ids.ids.bronze_key_id = trimIDMsg(msg.content)
-                                            msg.delete()
-                                            sentMessage.edit('(:gd:) Good, now the doors, starting with the golden one')
-                                            replyCollector.stop()
-                                        } else {
-                                            sentMessage.edit('that\'s not a bronze key try again')
-                                            msg.delete()
-                                        }
-                                    })
-                                    replyCollector.on('end', collected => {
-                                        const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                                        replyCollector.on('collect', msg => {
-                                            if (msg.content.startsWith('<:gd:')) {
-                                                console.log(trimIDMsg(msg.content))
-                                                textures_ids.ids.golden_door_id = trimIDMsg(msg.content)
-                                                msg.delete()
-                                                sentMessage.edit('(:sd:) And then the silver one')
-                                                replyCollector.stop()
-                                            } else {
-                                                sentMessage.edit('that\'s not a golden door try again')
-                                                msg.delete()
-                                            }
-                                        })
-                                        replyCollector.on('end', collected => {
-                                            const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                                            replyCollector.on('collect', msg => {
-                                                if (msg.content.startsWith('<:sd:')) {
-                                                    console.log(trimIDMsg(msg.content))
-                                                    textures_ids.ids.silver_door_id = trimIDMsg(msg.content)
-                                                    msg.delete()
-                                                    sentMessage.edit('(:bd:) And the bronze one')
-                                                    replyCollector.stop()
-                                                } else {
-                                                    sentMessage.edit('that\'s not a silver door try again')
-                                                    msg.delete()
-                                                }
-                                            })
-                                            replyCollector.on('end', collected => {
-                                                const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                                                replyCollector.on('collect', msg => {
-                                                    if (msg.content.startsWith('<:bd:')) {
-                                                        console.log(trimIDMsg(msg.content))
-                                                        textures_ids.ids.bronze_door_id = trimIDMsg(msg.content)
-                                                        msg.delete()
-                                                        sentMessage.edit('(:gdo:) You nailed it, now lets go with the opened doors, of course starting with the golden one')
-                                                        replyCollector.stop()
-                                                    } else {
-                                                        sentMessage.edit('that\'s not a bronze door try again')
-                                                        msg.delete()
-                                                    }
-                                                })
-                                                replyCollector.on('end', collected => {
-                                                    const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                                                    replyCollector.on('collect', msg => {
-                                                        if (msg.content.startsWith('<:gdo:')) {
-                                                            console.log(trimIDMsg2(msg.content))
-                                                            textures_ids.ids.golden_door_open_id = trimIDMsg2(msg.content)
-                                                            msg.delete()
-                                                            sentMessage.edit('(:sdo:) And now the silver one')
-                                                            replyCollector.stop()
-                                                        } else {
-                                                            sentMessage.edit('that\'s not an opened golden door try again')
-                                                            msg.delete()
-                                                        }
-                                                    })
-                                                    replyCollector.on('end', collected => {
-                                                        const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                                                        replyCollector.on('collect', msg => {
-                                                            if (msg.content.startsWith('<:sdo:')) {
-                                                                console.log(trimIDMsg2(msg.content))
-                                                                textures_ids.ids.silver_door_open_id = trimIDMsg2(msg.content)
-                                                                msg.delete()
-                                                                sentMessage.edit('(:bdo:) You guessed it, the bronze one')
-                                                                replyCollector.stop()
-                                                            } else {
-                                                                sentMessage.edit('that\'s not an opened silver door try again')
-                                                                msg.delete()
-                                                            }
-                                                        })
-                                                        replyCollector.on('end', collected => {
-                                                            const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                                                            replyCollector.on('collect', msg => {
-                                                                if (msg.content.startsWith('<:bdo:')) {
-                                                                    console.log(trimIDMsg2(msg.content))
-                                                                    textures_ids.ids.bronze_door_open_id = trimIDMsg2(msg.content)
-                                                                    msg.delete()
-                                                                    sentMessage.edit('(:gdf:) Almost done, now we need the opened doors combined with the facha, starting with the golden one')
-                                                                    replyCollector.stop()
-                                                                } else {
-                                                                    sentMessage.edit('that\'s not an opened bronze door try again')
-                                                                    msg.delete()
-                                                                }
-                                                            })
-                                                            replyCollector.on('end', collected => {
-                                                                const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                                                                replyCollector.on('collect', msg => {
-                                                                    if (msg.content.startsWith('<:gdf:')) {
-                                                                        console.log(trimIDMsg2(msg.content))
-                                                                        textures_ids.ids.golden_door_open_id = trimIDMsg2(msg.content)
-                                                                        msg.delete()
-                                                                        sentMessage.edit('(:sdf:) Then the silver one')
-                                                                        replyCollector.stop()
-                                                                    } else {
-                                                                        sentMessage.edit('that\'s not an opened golden door with The Facha try again')
-                                                                        msg.delete()
-                                                                    }
-                                                                })
-                                                                replyCollector.on('end', collected => {
-                                                                    const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                                                                    replyCollector.on('collect', msg => {
-                                                                        if (msg.content.startsWith('<:sdf:')) {
-                                                                            console.log(trimIDMsg2(msg.content))
-                                                                            textures_ids.ids.silver_door_open_id = trimIDMsg2(msg.content)
-                                                                            msg.delete()
-                                                                            sentMessage.edit('(:bdf:) By now you should know how it goes (the bronze one\'s next)')
-                                                                            replyCollector.stop()
-                                                                        } else {
-                                                                            sentMessage.edit('that\'s not an opened silver door with The Facha try again')
-                                                                            msg.delete()
-                                                                        }
-                                                                    })
-                                                                    replyCollector.on('end', collected => {
-                                                                        const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                                                                        replyCollector.on('collect', msg => {
-                                                                            if (msg.content.startsWith('<:bdf:')) {
-                                                                                console.log(trimIDMsg2(msg.content))
-                                                                                textures_ids.ids.bronze_door_open_id = trimIDMsg2(msg.content)
-                                                                                msg.delete()
-                                                                                sentMessage.edit('(:gks:) Nice, only 3 more to go, now lets go with the keys on top of spikes, starting with, you guessed it, the golden one')
-                                                                                replyCollector.stop()
-                                                                            } else {
-                                                                                sentMessage.edit('that\'s not an opened bronze door with The Facha try again')
-                                                                                msg.delete()
-                                                                            }
-                                                                        })
-                                                                        replyCollector.on('end', collected => {
-                                                                            const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                                                                            replyCollector.on('collect', msg => {
-                                                                                if (msg.content.startsWith('<:gks:')) {
-                                                                                    console.log(trimIDMsg2(msg.content))
-                                                                                    textures_ids.ids.golden_key_on_spike_id = trimIDMsg2(msg.content)
-                                                                                    msg.delete()
-                                                                                    sentMessage.edit('(:sks:) And then the silver one (kinda repetitive I know but necessary)')
-                                                                                    replyCollector.stop()
-                                                                                } else {
-                                                                                    sentMessage.edit('that\'s not a golden key on spikes try again')
-                                                                                    msg.delete()
-                                                                                }
-                                                                            })
-                                                                            replyCollector.on('end', collected => {
-                                                                                const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                                                                                replyCollector.on('collect', msg => {
-                                                                                    if (msg.content.startsWith('<:sks:')) {
-                                                                                        console.log(trimIDMsg2(msg.content))
-                                                                                        textures_ids.ids.silver_key_on_spike_id = trimIDMsg2(msg.content)
-                                                                                        msg.delete()
-                                                                                        sentMessage.edit('(:bks:) Ok this one\'s the last one, the bronze key on spikes')
-                                                                                        replyCollector.stop()
-                                                                                    } else {
-                                                                                        sentMessage.edit('that\'s not a silver key on spikes try again')
-                                                                                        msg.delete()
-                                                                                    }
-                                                                                })
-                                                                                replyCollector.on('end', collected => {
-                                                                                    const replyCollector = new Discord.MessageCollector(sentMessage.channel, m => m.author.id === user.id, { time: 30000 })
-                                                                                    replyCollector.on('collect', msg => {
-                                                                                        if (msg.content.startsWith('<:bks:')) {
-                                                                                            console.log(trimIDMsg2(msg.content))
-                                                                                            textures_ids.bronze_key_on_spike_id = trimIDMsg2(msg.content)
-                                                                                            msg.delete()
-                                                                                            sentMessage.edit('That\'s it you\'re all set now, Take it for a spin using //play and GGHF!')
-                                                                                            .then( sentMessage => {
-                                                                                                replyCollector.stop()
-                                                                                            })
-                                                                                            
-                                                                                        } else {
-                                                                                            sentMessage.edit('that\'s not a bronze key on spikes try again')
-                                                                                            msg.delete()
-                                                                                        }
-                                                                                    })
-                                                                                    replyCollector.on('end', collected => {
-                                                                                        fs.writeFileSync('textureID.json', JSON.stringify(textures_ids), 'utf8')
-                                                                                        console.log('Setup Successful')
-                                                                                    })
-                                                                                })
-                                                                            })
-                                                                        })
-                                                                    })
-                                                                })
-                                                            })
-                                                        })
-                                                    })
-                                                })
-                                            })
-                                        })
-                                    })
-                                })
-                            })
-                        })
-                    })
-                })
-            })
+        replyCollector.on('end', collected => { 
+            if (queryIndex != 21) {
+                queryIndex++
+                collectTextures(sentMessage)
+            } else {
+                fs.writeFileSync('textureID.json', JSON.stringify(textures_ids), 'utf8')
+                console.log('Setup Successful')
+            }
         })
+    }
+
+    msg.channel.send('(:fr:) Ok lets start the setup first send the wall texture').then( sentMessage => {
+        collectTextures(sentMessage)
     })
 }
-
+                
 client.login(BOT_TOKEN)
 
 async function game(msg) {
@@ -399,20 +249,10 @@ async function game(msg) {
     }
 
     let lvl_number = 1
-    let lvl = levels.lvl_1
+    let lvl = levels['lvl_' + lvl_number]
 
     function setLvl() {
-        switch (lvl_number) {
-            case 1:
-                lvl = levels.lvl_1
-                break
-            case 2:
-                lvl = levels.lvl_2
-                break
-            case 3:
-                lvl = levels.lvl_3
-                break
-        }
+        lvl = levels['lvl_' + lvl_number]
     }
 
     let currentUser = []
@@ -438,12 +278,7 @@ async function game(msg) {
     player_y = lvl.player_y
     moves = lvl.moves
     lives = 3
-    has_golden_key = false
-    has_silver_key = false
-    has_bronze_key = false
-    golden_door_opened = false
-    silver_door_opened = false
-    bronze_door_opened = false
+
     currentUser = [msg.author.id, msg.author.username, msg.author]
     console.log(msg.content, currentUser);
         msg.channel.send(buildMap(map_x, map_y)).then(async sentMessage => {
@@ -468,157 +303,17 @@ async function game(msg) {
         );
     
         let collector = sentMessage.createReactionCollector(filter, { max: moves });
-        collector.on('collect', (reaction, collectorr) => {
+        collector.on('collect', (reaction) => {
             console.log('got a reaction')
-    
+
             if (moves <= 0) {collector.stop('https://www.youtube.com/watch?v=OLpeX4RRo28')}
-            switch (reaction.emoji.name) {
-                case '➡':
-                    moves--
-                    sentMessage.reactions.resolve('➡').users.remove(currentUser[0])
-                    if (player_x + 3 == map_x || rightCollision(player_x, player_y)) {
-                        console.log('can\'t go right')
-                        break;
-                    } else {
-                        console.log('go right')
-                        console.log(`changed player x to : ${player_x + 1}`)
-                        if (isInSpike(player_x, player_y, 'right') == true) {
-                            console.log('is in spike')
-                            moves--
-                        }
-                        ++player_x
-                        if (takeKey(player_x, player_y) == 'gold') {
-                            has_golden_key = true
-                        }
-                        if (takeKey(player_x, player_y) == 'silver') {
-                            has_silver_key = true
-                        }
-                        if (takeKey(player_x, player_y) == 'bronze') {
-                            has_bronze_key = true
-                        }
-                        if (openDoor(player_x, player_y) == 'gold') {
-                            golden_door_opened = true
-                        }
-                        if (openDoor(player_x, player_y) == 'silver') {
-                            silver_door_opened = true
-                        }
-                        if (openDoor(player_x, player_y) == 'bronze') {
-                            bronze_door_opened = true
-                        }
-                        console.log(silver_door_opened)
-                        sentMessage.edit(buildMap(map_x, map_y))
-                        break;
-                    }
-                case '⬅':
-                    moves--
-                    sentMessage.reactions.resolve('⬅').users.remove(currentUser[0])
-                    if (player_x == 0 || leftCollision(player_x, player_y)) {
-                        console.log('can\'t go left')
-                        break;
-                    } else {
-                        console.log('go left')
-                        console.log(`changed player x to : ${player_x - 1}`)
-                        if (isInSpike(player_x, player_y, 'left')) {
-                            console.log('is in spike')
-                            moves--
-                        } 
-                        --player_x
-                        if (takeKey(player_x, player_y) == 'gold') {
-                            has_golden_key = true
-                        }
-                        if (takeKey(player_x, player_y) == 'silver') {
-                            has_silver_key = true
-                        }
-                        if (takeKey(player_x, player_y) == 'bronze') {
-                            has_bronze_key = true
-                        }
-                        if (openDoor(player_x, player_y) == 'gold') {
-                            golden_door_opened = true
-                        }
-                        if (openDoor(player_x, player_y) == 'silver') {
-                            silver_door_opened = true
-                        }
-                        if (openDoor(player_x, player_y) == 'bronze') {
-                            bronze_door_opened = true
-                        }
-                        sentMessage.edit(buildMap(map_x, map_y))
-                        break;
-                    }
-                case '⬆':
-                    moves--
-                    sentMessage.reactions.resolve('⬆').users.remove(currentUser[0])
-                    if (player_y == 0 || topCollision(player_x, player_y)) {
-                        console.log('can\'t go up')
-                        break
-                    } else {
-                        console.log('go up')
-                        console.log(`changed player y to : ${player_y - 1}`)
-                        if (isInSpike(player_x, player_y, 'up')) {
-                            console.log('is in spike')
-                            moves--
-                        }
-                        --player_y
-                        if (takeKey(player_x, player_y) == 'gold') {
-                            has_golden_key = true
-                        }
-                        if (takeKey(player_x, player_y) == 'silver') {
-                            has_silver_key = true
-                        }
-                        if (takeKey(player_x, player_y) == 'bronze') {
-                            has_bronze_key = true
-                        }
-                        if (openDoor(player_x, player_y) == 'gold') {
-                            golden_door_opened = true
-                        }
-                        if (openDoor(player_x, player_y) == 'silver') {
-                            silver_door_opened = true
-                        }
-                        if (openDoor(player_x, player_y) == 'bronze') {
-                            bronze_door_opened = true
-                        }
-                        sentMessage.edit(buildMap(map_x, map_y))
-                        break
-                    }
-                case '⬇':
-                    moves--
-                    sentMessage.reactions.resolve('⬇').users.remove(currentUser[0])
-                    if (player_y + 3 == map_y || bottomCollision(player_x, player_y)) {
-                        console.log('can\'t go down')
-                        break;
-                    } else {
-                        console.log('go down')
-                        console.log(`changed player y to : ${player_y + 1}`)
-                        if (isInSpike(player_x, player_y, 'down')) {
-                            console.log('is in spike')
-                            moves--
-                        }
-                        ++player_y
-                        if (takeKey(player_x, player_y) == 'gold') {
-                            has_golden_key = true
-                        }
-                        if (takeKey(player_x, player_y) == 'silver') {
-                            has_silver_key = true
-                        }
-                        if (takeKey(player_x, player_y) == 'bronze') {
-                            has_bronze_key = true
-                        }
-                        if (openDoor(player_x, player_y) == 'gold') {
-                            golden_door_opened = true
-                        }
-                        if (openDoor(player_x, player_y) == 'silver') {
-                            silver_door_opened = true
-                        }
-                        if (openDoor(player_x, player_y) == 'bronze') {
-                            bronze_door_opened = true
-                        }
-                        sentMessage.edit(buildMap(map_x, map_y))
-                        break;
-                    }
-            }
+
+            movement(reaction.emoji.name)
+            
             if (lvl.exit.exit_x == player_x + 2 &&
                 lvl.exit.exit_y == player_y + 2) {
                     win = true
-                    collector.stop('https://www.youtube.com/watch?v=OLpeX4RRo28')
+                    collector.stop()
             }
         });
     
@@ -773,6 +468,22 @@ async function game(msg) {
                 } else if (lvl.spikes.lvl_spikes_x[spike_index] == x &&
                     lvl.spikes.lvl_spikes_y[spike_index] == y && lvl.keys.golden_key_x == x &&
                     lvl.keys.golden_key_y == y && has_golden_key == false
+                    )
+                {
+                    map += textures.golden_key_on_spike
+                    spike_index ++
+                    // render silver key on spikes \/
+                } else if (lvl.spikes.lvl_spikes_x[spike_index] == x &&
+                    lvl.spikes.lvl_spikes_y[spike_index] == y && lvl.keys.silver_key_x == x &&
+                    lvl.keys.silver_key_y == y && has_silver_key == false
+                    )
+                {
+                    map += textures.silver_key_on_spike
+                    spike_index ++
+                    // render bronze key on spikes \/
+                } else if (lvl.spikes.lvl_spikes_x[spike_index] == x &&
+                    lvl.spikes.lvl_spikes_y[spike_index] == y && lvl.keys.bronze_key_x == x &&
+                    lvl.keys.bronze_key_y == y && has_bronze_key == false
                     )
                 {
                     map += textures.golden_key_on_spike
@@ -1110,6 +821,70 @@ async function game(msg) {
         if (x + 2 == lvl.doors.bronze_door_x &&
             y + 2 == lvl.doors.bronze_door_y) {
                 return 'bronze'
+        }
+    }
+    function movement(direction) {
+        const position = {
+            ":arrow_right": {
+                map_fixed_position: player_x + 3 == map_x,
+                collision: rightCollision(player_x, player_y),
+                currentDirection: 'right',
+                increase: player_x++
+            },
+            ":arrow_left": {
+                map_fixed_position: player_x == 0,
+                collision: leftCollision(player_x, player_y),
+                currentDirection: 'left',
+                increase: player_x--
+            },
+            ":arrow_up": {
+                map_fixed_position: player_y == 0,
+                collision: topCollision(player_x, player_y),
+                currentDirection: 'up',
+                increase: player_y--
+            },
+            ":arrow_down": {
+                map_fixed_position: player_y + 3 == map_y,
+                collision: bottomCollision(player_x, player_y),
+                currentDirection: 'down',
+                increase: player_y++
+            }
+        }
+    
+        const currentPosition = position[direction]
+    
+        moves--
+        sentMessage.reactions.resolve(direction).users.remove(currentUser[0])
+        if (currentPosition.map_fixed_position  || currentPosition.collision) {
+            console.log(`can\'t go ${currentPosition.currentDirection}`)
+            break;
+        } else {
+            console.log(`go ${currentPosition.currentDirection}`)
+            if (isInSpike(player_x, player_y, currentPosition.currentDirection) == true) {
+                console.log('is in spike')
+                moves--
+            }
+            currentPosition.increase
+            if (takeKey(player_x, player_y) == 'gold') {
+                has_golden_key = true
+            }
+            if (takeKey(player_x, player_y) == 'silver') {
+                has_silver_key = true
+            }
+            if (takeKey(player_x, player_y) == 'bronze') {
+                has_bronze_key = true
+            }
+            if (openDoor(player_x, player_y) == 'gold') {
+                golden_door_opened = true
+            }
+            if (openDoor(player_x, player_y) == 'silver') {
+                silver_door_opened = true
+            }
+            if (openDoor(player_x, player_y) == 'bronze') {
+                bronze_door_opened = true
+            }
+            sentMessage.edit(buildMap(map_x, map_y))
+            break;
         }
     }
 }

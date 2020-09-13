@@ -56,13 +56,13 @@ Simpler setup update
 
     In order to be able to run the game on your new bot, you'll need a bot token, this is a randomly generated string that allows your bot to communicate with Discord.
 
-    To get your token, go to the [Discord developer portal](https://discord.com/developers/applications), go to your app, and then navigate to bot, you'll see a "Click to reveal token" and under that, a button that says **"Copy"**, click that button, and boom, you hava a token.
+    To get your token, go to the [Discord developer portal](https://discord.com/developers/applications), go to your app, and then navigate to bot, you'll see a "Click to reveal token" and under that, a button that says **"Copy"**, click that button, and boom, you have a token.
 
   * IV - Using your new token
 
     To use your new token, go to the game folder you cloned earlier, and the **"token.js"** file, on any text editor you want, to keep it simple you can open it with Notepad, if you're using windows, Vi if you're on Linux (Or whatever text editor you have as default, probably if your using linux you kinda know what you're doing) or TextEdit if you're on MacOS.
 
-    The "token.js" is very straightforward, just replace the 'YOUR_TOKEN' with, you guessed it, your token, then save the file and your ready to go.
+    The "token.js" is very straightforward, just replace the 'YOUR_TOKEN' with, you guessed it, your token, then save the file and you're ready to go.
 
   * V - Running the bot
 
@@ -81,14 +81,16 @@ Simpler setup update
     
   * II - Textures setup
 
-    Now with the emoji textures added to the server there's ony one more step to do before playing.
+    Now with the emoji textures added to the server there's only one more step to do before playing.
     
     Discord Emojis ID are unique, even if you add the same picture as an emoji on two different servers, the emoji ID will be different, so you'll have to give the game the unique ID of the textures.
     
     To do that, send a message with the prefix //setup, and follow the instructions 😉.
     
-    That's it, the game should recognize the //setup command and setup all the IDs for you.
+    That's it, the game should recognize the //setup command and set up all the IDs for you.
     
   * III - Take it for a spin
 
     That's it, now you're ready to help The Facha on his adventure to find the Golden Tula, GLHF!
+
+

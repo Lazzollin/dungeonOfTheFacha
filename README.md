@@ -33,13 +33,10 @@ Simpler setup update
       Then, if you don't have [Node.js](https://nodejs.org/en/) installed, you should, it's in the requirements
 
       Once you have [Node.js](https://nodejs.org/en/) installed, on cmd, go to the folder you created for the game and clone the repository like this:
+      
+         > git clone https://github.com/Lazzollin/dungeonOfTheFacha
 
-        ```
-          git clone https://github.com/Lazzollin/dungeonOfTheFacha
-
-          cd dungeonOfTheFacha
-
-        ```
+         > cd dungeonOfTheFacha
       
     ### For Linux Users
     ### For MacOs Users

@@ -38,8 +38,6 @@ Simpler setup update
 
          > cd dungeonOfTheFacha
       
-    ### For Linux Users
-    ### For MacOs Users
 
   * II - Create a discord bot
 

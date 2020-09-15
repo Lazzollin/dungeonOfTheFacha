@@ -3,6 +3,8 @@ const fs = require('fs')
 const { BOT_TOKEN } = require('./token')
 const { levels } = require('./levels');
 const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
+const ffmpeg = require('ffmpeg-static')
+const opus = require('@discordjs/opus')
 
 client = new Discord.Client();
 
@@ -14,6 +16,7 @@ client.on('message', message => {
     switch (message.content) {
         case '//play':
             game(message)
+            music(message)
             break
         case '//setup':
             if (message.member.hasPermission('BAN_MEMBERS')) {
@@ -23,6 +26,27 @@ client.on('message', message => {
             }
     }
 });
+
+async function music(message){
+    if(!message.guild) return
+
+    if(message.member.voice.channel){
+        const connection = await message.member.voice.channel.join()
+
+        const dispatcher = connection.play(ffmpeg.createReadStream('/music/DOTF_MainTheme_Concept.wav', {type: 'wav/opus'}))
+
+        dispatcher.on("start", ()=>{
+            console.log("DOTF_MainTheme_Concept.wav is now playing")
+        })
+        dispatcher.on("finish", ()=>{
+            console.log("DOTF_MainTheme_Concept.wav has finished playing")
+        })
+        dispatcher.error("error", console.error)
+
+    }else{
+        message.reply("[First you need join into the voice channel]")
+    }
+}
 
 function autoSetup(msg) {
     let textures_ids = {

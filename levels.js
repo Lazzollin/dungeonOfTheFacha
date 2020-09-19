@@ -27,8 +27,8 @@ module.exports = {
                 golden_door_y: [4],
                 silver_door_x: [6], 
                 silver_door_y: [3],
-                bronze_door_x: [3,3], 
-                bronze_door_y: [3,4],
+                bronze_door_x: [3], 
+                bronze_door_y: [3],
             },
             'box': {
                 box_x: [],

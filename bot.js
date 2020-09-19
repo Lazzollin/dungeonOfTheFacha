@@ -3,8 +3,8 @@ const fs = require('fs')
 const { BOT_TOKEN } = require('./token')
 const { levels } = require('./levels');
 const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
-const ffmpeg = require('ffmpeg-static')
-const opus = require('@discordjs/opus')
+const path = require('path');
+
 
 client = new Discord.Client();
 
@@ -12,11 +12,10 @@ client.on('ready' , () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on('message', message => {
+client.on('message', async message => {
     switch (message.content) {
         case '//play':
             game(message)
-            music(message)
             break
         case '//setup':
             if (message.member.hasPermission('BAN_MEMBERS')) {
@@ -24,28 +23,31 @@ client.on('message', message => {
             } else {
                 message.channel.send('Wait, that\'s illegal')
             }
+        case '//music':
+            music(message)
     }
 });
 
 async function music(message){
-    if(!message.guild) return
+    const { voice } = message.member
 
-    if(message.member.voice.channel){
-        const connection = await message.member.voice.channel.join()
-
-        const dispatcher = connection.play(ffmpeg.createReadStream('/music/DOTF_MainTheme_Concept.wav', {type: 'wav/opus'}))
-
-        dispatcher.on("start", ()=>{
-            console.log("DOTF_MainTheme_Concept.wav is now playing")
-        })
-        dispatcher.on("finish", ()=>{
-            console.log("DOTF_MainTheme_Concept.wav has finished playing")
-        })
-        dispatcher.error("error", console.error)
-
-    }else{
-        message.reply("[First you need join into the voice channel]")
+    if (!voice.channel.id){
+        message.reply("You must be in a voice channel")
+        return
     }
+    voice.channel.join().then((connection)=>{
+        try{
+            const dispatcher = connection.play(path.join(__dirname,'/music/DOTF_MainTheme_Concept.wav'))
+
+            dispatcher.on('finish', () =>{
+                console.log("Replay song")
+                music(message)
+            })
+
+        } catch(error){
+            console.log(error)
+        }
+    })
 }
 
 function autoSetup(msg) {

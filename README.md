@@ -1,4 +1,4 @@
-# Dungeon of the Facha 0.2
+# Dungeon of the Facha 0.4
 
 Simpler setup update
 

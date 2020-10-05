@@ -17,7 +17,6 @@
     "@discordjs/opus": "github:discordjs/opus",
     "discord.io": "^2.5.3",
     "discord.js": "^12.3.1",
-    "ffmpeg-static": "^4.2.7",
     "fs": "0.0.1-security"
   }
 }

@@ -5,6 +5,7 @@ const { levels } = require('./levels');
 const path = require('path');
 const autoSetup = require('./autosetup')
 const music = require('./music')
+const game = require('./game')
 
 
 client = new Discord.Client();

@@ -8,7 +8,7 @@ module.exports = {
         }
         voice.channel.join().then((connection)=>{
             try{
-                const dispatcher = connection.play(path.join(__dirname,'/music/DOTF_MainTheme_Concept.wav'))
+                const dispatcher = connection.play(path.join(__dirname,'/music/DotF_MainTheme.wav.wav'))
     
                 dispatcher.on('finish', () =>{
                     console.log("Replay song")

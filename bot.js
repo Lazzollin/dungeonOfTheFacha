@@ -1,10 +1,8 @@
 const Discord = require('discord.js')
-const fs = require('fs')
 const { BOT_TOKEN } = require('./token')
-const { levels } = require('./levels');
-const path = require('path');
-const autoSetup = require('./autosetup')
-const music = require('./music')
+const { autoSetup } = require('./autosetup')
+const { music } = require('./music')
+const { game } = require('./game')
 
 
 client = new Discord.Client();
@@ -31,4 +29,4 @@ client.on('message', message => {
 
 client.login(BOT_TOKEN)
 
-// https://www.youtube.com/watch?v=X33nc9XXNYs
+//https://www.youtube.com/watch?v=X33nc9XXNYs

@@ -1,18 +1,20 @@
+const path = require('path');
+
 module.exports = {
-    music(message){
-        const { voice } = message.member
+    music(msg) {
+        const { voice } = msg.member
     
         if (!voice.channel.id){
-            message.reply("You must be in a voice channel")
+            msg.reply("You must be in a voice channel")
             return
         }
         voice.channel.join().then((connection)=>{
             try{
-                const dispatcher = connection.play(path.join(__dirname,'/music/DotF_MainTheme.wav.wav'))
+                const dispatcher = connection.play(path.join(__dirname,'/music/DotF_MainTheme.wav'))
     
                 dispatcher.on('finish', () =>{
                     console.log("Replay song")
-                    music(message)
+                    this.music
                 })
     
             } catch(error){

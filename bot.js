@@ -22,6 +22,7 @@ client.on('message', message => {
             } else {
                 message.channel.send('Wait, that\'s illegal')
             }
+            break
         case '//music':
             music(message)
     }

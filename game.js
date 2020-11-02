@@ -1,6 +1,6 @@
 const fs = require('fs')
 const { levels } = require('./levels')
-//const bot = require('./bot')
+const Discord = require('discord.js')
 
 module.exports = {
     game(msg) {
@@ -146,11 +146,11 @@ module.exports = {
                                 case '⏩':
                                     if (lvl_number === 7) {
                                         sentMessage.delete()
-                                        /*sentMessage.channel.send(new bot.Discord.MessageEmbed()
+                                        sentMessage.channel.send(new Discord.MessageEmbed()
                                         .setColor('#ff0000')
                                         .setTitle(`${currentUser[1]} Flaco es la beta no tenemos mas niveles calmate crack fiera mastodonte cosmico citroneta overclockeada`)
                                         .setURL('https://www.youtube.com/watch?v=dQw4w9WgXcQ'))
-                                        .then( sentMessage => {setTimeout(() => { sentMessage.delete() }, 15000)})*/
+                                        .then( sentMessage => {setTimeout(() => { sentMessage.delete() }, 15000)})
                                         break
                                     } else {
                                         lvl_number++
@@ -204,11 +204,11 @@ module.exports = {
                     })
                 } else if (lives === 1){
                     sentMessage.delete()
-                    /*sentMessage.channel.send(new bot.Discord.MessageEmbed()
+                    sentMessage.channel.send(new Discord.MessageEmbed()
                         .setColor('#ff0000')
                         .setTitle(`${currentUser[1]} jajaj sos muy malardo`)
                         .setURL('https://www.youtube.com/watch?v=SJXiZrTiNe0'))
-                        .then( sentMessage => {setTimeout(() => { sentMessage.delete() }, 15000)})*/
+                        .then( sentMessage => {setTimeout(() => { sentMessage.delete() }, 15000)})
                 } else {
                     console.log(`sin movimientos`);
                     lives--
@@ -688,19 +688,19 @@ module.exports = {
         }
         
         function winMessage() {
-            /*return (new bot.Discord.MessageEmbed()
+            return (new Discord.MessageEmbed()
                 .setColor('#ff0000')
                 .setTitle(`${currentUser[1]} buena tula`)
                 .setURL('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
-                .addField ('Extraordinario', `${currentUser[2]} tamaño del tronco muy impactante`))*/
+                .addField ('Extraordinario', `${currentUser[2]} tamaño del tronco muy impactante`))
         }
         
         function deathMessage() {
-            /*return (new bot.Discord.MessageEmbed()
+            return (new Discord.MessageEmbed()
                 .setColor('#ff0000')
                 .setTitle(`${currentUser[1]} sos malardo`)
                 .setURL('https://www.youtube.com/watch?v=SJXiZrTiNe0')
-                .addField ('Mala tula', `${currentUser[2]} tamaño muy decepcionante`))*/
+                .addField ('Mala tula', `${currentUser[2]} tamaño muy decepcionante`))
         }
         
         function isInSpike(x, y, s) {
